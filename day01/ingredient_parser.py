@@ -1,0 +1,5 @@
+x = input('输入前三个成分；')
+first = x.split(',')
+print(f'第一个成分: {first[0]}')
+print(f'第二个成分: {first[1]}')
+print(f'第三个成分: {first[2]}')
