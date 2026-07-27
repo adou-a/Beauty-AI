@@ -1,7 +1,9 @@
-while True:
 
-    n = input('请输入成分： ')
-    print('已记录：')
-    print(n)
-    if n =='quit':
-        break
+
+ingredinet = input('请输入成分： ')
+
+
+if ingredinet =='Vitamin C':
+    print('抗氧化')
+elif ingredinet =='Alcohol':
+    print('注意刺激性')

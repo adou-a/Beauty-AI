@@ -1,7 +1,7 @@
 
 def main():
-    show_menu()
     while True:
+        show_menu()
         try:
             choice = int(input('give a number: '))
             if choice == 1:
