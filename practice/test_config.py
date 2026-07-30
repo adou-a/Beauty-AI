@@ -1,0 +1,10 @@
+import sys
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+sys.path.append(str(BASE_DIR))
+
+from src.config.settings import OPENAI_API_KEY
+print(OPENAI_API_KEY)

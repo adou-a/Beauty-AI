@@ -1,53 +1,860 @@
 [
-    
-    {" chinese_name":"烟酰胺",
-    " inci_name ":"Niacinamide",
-    "functions":[
-        "提亮皮肤",
-        "保湿"
-    ]
-
-},
-
-    {" chinese_name " : "甘油",
-    " inci_name " : "Glycerin",
-    " functions " :["保湿"
-]
-
-},
-{
-" chinese_name" : "透明质酸钠",
-" inci_name " : "Sodium Hyaluronate"
-},
-{
-    " chinese_name " : " 神经酰胺 ",
-    " inci_name " : "Geramide NP "
-},
-{
-    " chinese_name ":" 熊果苷 ",
-    " inci_name " :"Arbutin"
-
-},
-{
-    " chinese_name ":"视黄醇",
-    " inci_name ":"Retinol"
-},
-{
-    " chinese_name ":"泛醇",
-    " inci_name " :"Panthenol"
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    {
+        "id": 1,
+        "inci_name": "Niacinamide",
+        "chinese_name": "烟酰胺",
+        "category": "美白修护",
+        "functions": [
+            "帮助改善肤色不均",
+            "支持皮肤屏障",
+            "调节油脂分泌"
+        ],
+        "risk_level": "低",
+        "description": "常见护肤成分，可用于改善暗沉和增强皮肤屏障功能。",
+        "suitable_skin_types": [
+            "油性皮肤",
+            "混合性皮肤",
+            "暗沉肌"
+        ],
+        "avoid_skin_types": [
+            "高浓度初次使用的敏感肌"
+        ]
+    },
+    {
+        "id": 2,
+        "inci_name": "Glycerin",
+        "chinese_name": "甘油",
+        "category": "保湿",
+        "functions": [
+            "吸湿保湿",
+            "减少皮肤干燥"
+        ],
+        "risk_level": "低",
+        "description": "经典保湿剂，通过吸收水分帮助保持皮肤柔软。",
+        "suitable_skin_types": [
+            "干性皮肤",
+            "敏感肌"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 3,
+        "inci_name": "Sodium Hyaluronate",
+        "chinese_name": "透明质酸钠",
+        "category": "保湿",
+        "functions": [
+            "补充水分",
+            "改善干燥感"
+        ],
+        "risk_level": "低",
+        "description": "透明质酸的盐形式，常用于保湿类产品。",
+        "suitable_skin_types": [
+            "所有肤质"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 4,
+        "inci_name": "Butylene Glycol",
+        "chinese_name": "丁二醇",
+        "category": "保湿溶剂",
+        "functions": [
+            "保湿",
+            "改善产品肤感"
+        ],
+        "risk_level": "低",
+        "description": "常见化妆品辅助成分，帮助提升使用感。",
+        "suitable_skin_types": [
+            "所有肤质"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 5,
+        "inci_name": "Propylene Glycol",
+        "chinese_name": "丙二醇",
+        "category": "保湿",
+        "functions": [
+            "吸湿",
+            "帮助成分溶解"
+        ],
+        "risk_level": "低",
+        "description": "常见保湿辅助成分。",
+        "suitable_skin_types": [
+            "普通皮肤"
+        ],
+        "avoid_skin_types": [
+            "极度敏感肌"
+        ]
+    },
+    {
+        "id": 6,
+        "inci_name": "Panthenol",
+        "chinese_name": "泛醇",
+        "category": "修护舒缓",
+        "functions": [
+            "帮助皮肤屏障恢复",
+            "舒缓干燥"
+        ],
+        "risk_level": "低",
+        "description": "维生素B5衍生物，经常用于修护产品。",
+        "suitable_skin_types": [
+            "敏感肌",
+            "干性皮肤"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 7,
+        "inci_name": "Ceramide NP",
+        "chinese_name": "神经酰胺",
+        "category": "屏障修护",
+        "functions": [
+            "增强皮肤屏障",
+            "减少水分流失"
+        ],
+        "risk_level": "低",
+        "description": "皮肤天然存在的脂质成分之一。",
+        "suitable_skin_types": [
+            "干皮",
+            "敏感肌"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 8,
+        "inci_name": "Centella Asiatica Extract",
+        "chinese_name": "积雪草提取物",
+        "category": "舒缓",
+        "functions": [
+            "舒缓皮肤",
+            "改善不适感"
+        ],
+        "risk_level": "低",
+        "description": "植物来源舒缓成分。",
+        "suitable_skin_types": [
+            "敏感肌",
+            "痘肌"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 9,
+        "inci_name": "Dipotassium Glycyrrhizate",
+        "chinese_name": "甘草酸二钾",
+        "category": "舒缓",
+        "functions": [
+            "舒缓肌肤",
+            "改善泛红感"
+        ],
+        "risk_level": "低",
+        "description": "常用于敏感护理产品。",
+        "suitable_skin_types": [
+            "敏感肌"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 10,
+        "inci_name": "Retinol",
+        "chinese_name": "视黄醇",
+        "category": "抗老",
+        "functions": [
+            "改善细纹",
+            "促进皮肤更新"
+        ],
+        "risk_level": "中",
+        "description": "经典抗老成分，需要循序建立耐受。",
+        "suitable_skin_types": [
+            "成熟肌"
+        ],
+        "avoid_skin_types": [
+            "孕期人群",
+            "敏感肌初次使用"
+        ]
+    },
+    {
+        "id": 11,
+        "inci_name": "Ascorbic Acid",
+        "chinese_name": "抗坏血酸（维生素C）",
+        "category": "美白抗氧化",
+        "functions": [
+            "抗氧化",
+            "帮助改善暗沉"
+        ],
+        "risk_level": "中",
+        "description": "经典抗氧化成分，对光和空气较敏感，需要注意保存。",
+        "suitable_skin_types": [
+            "暗沉肌",
+            "油性皮肤"
+        ],
+        "avoid_skin_types": [
+            "敏感肌初次使用"
+        ]
+    },
+    {
+        "id": 12,
+        "inci_name": "Alpha-Arbutin",
+        "chinese_name": "α-熊果苷",
+        "category": "美白",
+        "functions": [
+            "帮助改善肤色不均",
+            "减少黑色素形成相关过程"
+        ],
+        "risk_level": "低",
+        "description": "常用于提亮肤色类产品。",
+        "suitable_skin_types": [
+            "暗沉肌"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 13,
+        "inci_name": "Adenosine",
+        "chinese_name": "腺苷",
+        "category": "抗老",
+        "functions": [
+            "改善皮肤紧致感",
+            "帮助减少细纹视觉表现"
+        ],
+        "risk_level": "低",
+        "description": "常见抗老护肤成分。",
+        "suitable_skin_types": [
+            "成熟肌",
+            "干性皮肤"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 14,
+        "inci_name": "Palmitoyl Pentapeptide-4",
+        "chinese_name": "棕榈酰五肽-4",
+        "category": "抗老",
+        "functions": [
+            "支持皮肤弹性",
+            "改善细纹外观"
+        ],
+        "risk_level": "低",
+        "description": "属于信号肽类成分。",
+        "suitable_skin_types": [
+            "成熟肌"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 15,
+        "inci_name": "Squalane",
+        "chinese_name": "角鲨烷",
+        "category": "润肤修护",
+        "functions": [
+            "减少水分流失",
+            "提升柔润感"
+        ],
+        "risk_level": "低",
+        "description": "肤感较轻的润肤成分。",
+        "suitable_skin_types": [
+            "干皮",
+            "敏感肌"
+        ],
+        "avoid_skin_types": [
+            "特别容易闷痘肤质需观察"
+        ]
+    },
+    {
+        "id": 16,
+        "inci_name": "Jojoba Seed Oil",
+        "chinese_name": "霍霍巴籽油",
+        "category": "润肤",
+        "functions": [
+            "柔润皮肤",
+            "改善干燥"
+        ],
+        "risk_level": "低",
+        "description": "植物来源油脂类成分。",
+        "suitable_skin_types": [
+            "干性皮肤"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 17,
+        "inci_name": "Tocopherol",
+        "chinese_name": "生育酚（维生素E）",
+        "category": "抗氧化",
+        "functions": [
+            "抗氧化",
+            "帮助保护皮肤"
+        ],
+        "risk_level": "低",
+        "description": "常用于护肤和防晒产品。",
+        "suitable_skin_types": [
+            "干皮",
+            "成熟肌"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 18,
+        "inci_name": "Tea Tree Leaf Oil",
+        "chinese_name": "茶树精油",
+        "category": "控油护理",
+        "functions": [
+            "改善油脂感",
+            "清爽肤感"
+        ],
+        "risk_level": "中",
+        "description": "精油类成分，部分人群可能产生刺激。",
+        "suitable_skin_types": [
+            "油性皮肤"
+        ],
+        "avoid_skin_types": [
+            "敏感肌"
+        ]
+    },
+    {
+        "id": 19,
+        "inci_name": "Salicylic Acid",
+        "chinese_name": "水杨酸",
+        "category": "角质护理",
+        "functions": [
+            "帮助改善毛孔堵塞",
+            "去除角质"
+        ],
+        "risk_level": "中",
+        "description": "常见酸类护肤成分，需要注意使用频率。",
+        "suitable_skin_types": [
+            "油皮",
+            "痘肌"
+        ],
+        "avoid_skin_types": [
+            "屏障受损肌肤"
+        ]
+    },
+    {
+        "id": 20,
+        "inci_name": "Glycolic Acid",
+        "chinese_name": "甘醇酸",
+        "category": "角质护理",
+        "functions": [
+            "促进角质更新",
+            "改善粗糙感"
+        ],
+        "risk_level": "中",
+        "description": "属于果酸类成分。",
+        "suitable_skin_types": [
+            "耐受性较好的皮肤"
+        ],
+        "avoid_skin_types": [
+            "敏感肌"
+        ]
+    },
+    {
+        "id": 21,
+        "inci_name": "Lactic Acid",
+        "chinese_name": "乳酸",
+        "category": "角质护理",
+        "functions": [
+            "温和去角质",
+            "改善干燥粗糙"
+        ],
+        "risk_level": "中",
+        "description": "果酸的一种，相对较温和。",
+        "suitable_skin_types": [
+            "干性皮肤"
+        ],
+        "avoid_skin_types": [
+            "敏感肌"
+        ]
+    },
+    {
+        "id": 22,
+        "inci_name": "Zinc Oxide",
+        "chinese_name": "氧化锌",
+        "category": "防晒",
+        "functions": [
+            "物理防晒",
+            "减少紫外线影响"
+        ],
+        "risk_level": "低",
+        "description": "常见矿物防晒剂。",
+        "suitable_skin_types": [
+            "敏感肌",
+            "儿童防晒"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 23,
+        "inci_name": "Titanium Dioxide",
+        "chinese_name": "二氧化钛",
+        "category": "防晒",
+        "functions": [
+            "物理防晒"
+        ],
+        "risk_level": "低",
+        "description": "常见防晒和遮盖类成分。",
+        "suitable_skin_types": [
+            "所有肤质"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 24,
+        "inci_name": "Avobenzone",
+        "chinese_name": "阿伏苯宗",
+        "category": "防晒",
+        "functions": [
+            "吸收紫外线"
+        ],
+        "risk_level": "低",
+        "description": "化学防晒剂之一。",
+        "suitable_skin_types": [
+            "普通皮肤"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 25,
+        "inci_name": "Ethylhexyl Methoxycinnamate",
+        "chinese_name": "甲氧基肉桂酸乙基己酯",
+        "category": "防晒",
+        "functions": [
+            "UVB防护"
+        ],
+        "risk_level": "中",
+        "description": "常见化学防晒剂。",
+        "suitable_skin_types": [
+            "普通皮肤"
+        ],
+        "avoid_skin_types": [
+            "部分敏感肌"
+        ]
+    },
+    {
+        "id": 26,
+        "inci_name": "Hydrolyzed Collagen",
+        "chinese_name": "水解胶原",
+        "category": "保湿",
+        "functions": [
+            "增加皮肤柔润感",
+            "帮助改善干燥"
+        ],
+        "risk_level": "低",
+        "description": "胶原蛋白水解后的成分，主要用于皮肤表面的保湿和肤感改善。",
+        "suitable_skin_types": [
+            "干性皮肤",
+            "缺水肌"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 27,
+        "inci_name": "Snail Secretion Filtrate",
+        "chinese_name": "蜗牛分泌物滤液",
+        "category": "修护保湿",
+        "functions": [
+            "保湿",
+            "改善皮肤柔软度"
+        ],
+        "risk_level": "低",
+        "description": "常用于保湿修护类产品。",
+        "suitable_skin_types": [
+            "干性皮肤",
+            "普通皮肤"
+        ],
+        "avoid_skin_types": [
+            "对相关成分过敏人群"
+        ]
+    },
+    {
+        "id": 28,
+        "inci_name": "Beta-Glucan",
+        "chinese_name": "β-葡聚糖",
+        "category": "舒缓修护",
+        "functions": [
+            "帮助舒缓皮肤",
+            "增强保湿能力"
+        ],
+        "risk_level": "低",
+        "description": "常见舒缓保湿成分。",
+        "suitable_skin_types": [
+            "敏感肌",
+            "干性皮肤"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 29,
+        "inci_name": "Allantoin",
+        "chinese_name": "尿囊素",
+        "category": "舒缓",
+        "functions": [
+            "舒缓皮肤",
+            "减少干燥不适"
+        ],
+        "risk_level": "低",
+        "description": "温和型舒缓护理成分。",
+        "suitable_skin_types": [
+            "敏感肌",
+            "干皮"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 30,
+        "inci_name": "Madecassoside",
+        "chinese_name": "羟基积雪草苷",
+        "category": "修护",
+        "functions": [
+            "帮助舒缓",
+            "支持皮肤屏障"
+        ],
+        "risk_level": "低",
+        "description": "积雪草中的活性成分之一。",
+        "suitable_skin_types": [
+            "敏感肌",
+            "泛红肌"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 31,
+        "inci_name": "Green Tea Extract",
+        "chinese_name": "绿茶提取物",
+        "category": "抗氧化",
+        "functions": [
+            "抗氧化",
+            "改善皮肤油腻感"
+        ],
+        "risk_level": "低",
+        "description": "植物抗氧化成分。",
+        "suitable_skin_types": [
+            "油皮",
+            "普通皮肤"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 32,
+        "inci_name": "Chamomilla Recutita Extract",
+        "chinese_name": "洋甘菊提取物",
+        "category": "舒缓",
+        "functions": [
+            "舒缓皮肤",
+            "改善不适感"
+        ],
+        "risk_level": "低",
+        "description": "常用于舒缓类护肤产品。",
+        "suitable_skin_types": [
+            "敏感肌"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 33,
+        "inci_name": "Aloe Barbadensis Leaf Juice",
+        "chinese_name": "芦荟汁",
+        "category": "补水舒缓",
+        "functions": [
+            "补充水分",
+            "舒缓肌肤"
+        ],
+        "risk_level": "低",
+        "description": "常见植物保湿舒缓成分。",
+        "suitable_skin_types": [
+            "干皮",
+            "晒后护理肌肤"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 34,
+        "inci_name": "Licorice Root Extract",
+        "chinese_name": "光果甘草根提取物",
+        "category": "舒缓亮肤",
+        "functions": [
+            "抗氧化",
+            "帮助改善暗沉"
+        ],
+        "risk_level": "低",
+        "description": "植物来源护理成分。",
+        "suitable_skin_types": [
+            "暗沉肌",
+            "敏感肌"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 35,
+        "inci_name": "Bakuchiol",
+        "chinese_name": "补骨脂酚",
+        "category": "抗老",
+        "functions": [
+            "改善细纹视觉表现",
+            "提升皮肤紧致感"
+        ],
+        "risk_level": "中",
+        "description": "植物来源抗老成分，常作为视黄醇替代选择之一。",
+        "suitable_skin_types": [
+            "成熟肌"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 36,
+        "inci_name": "Caffeine",
+        "chinese_name": "咖啡因",
+        "category": "眼部护理",
+        "functions": [
+            "改善眼周疲惫感",
+            "帮助减少浮肿视觉表现"
+        ],
+        "risk_level": "低",
+        "description": "常用于眼霜和眼精华产品。",
+        "suitable_skin_types": [
+            "眼周护理需求人群"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 37,
+        "inci_name": "Carbomer",
+        "chinese_name": "卡波姆",
+        "category": "增稠剂",
+        "functions": [
+            "调整产品质地",
+            "稳定配方"
+        ],
+        "risk_level": "低",
+        "description": "主要用于改善产品结构，不属于主要功效成分。",
+        "suitable_skin_types": [
+            "所有肤质"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 38,
+        "inci_name": "Xanthan Gum",
+        "chinese_name": "黄原胶",
+        "category": "增稠剂",
+        "functions": [
+            "增加产品黏度",
+            "稳定配方"
+        ],
+        "risk_level": "低",
+        "description": "常见天然来源增稠剂。",
+        "suitable_skin_types": [
+            "所有肤质"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 39,
+        "inci_name": "Phenoxyethanol",
+        "chinese_name": "苯氧乙醇",
+        "category": "防腐剂",
+        "functions": [
+            "抑制微生物生长",
+            "保护产品稳定"
+        ],
+        "risk_level": "中",
+        "description": "法规允许使用的常见防腐剂。",
+        "suitable_skin_types": [
+            "普通皮肤"
+        ],
+        "avoid_skin_types": [
+            "极敏感肌需注意"
+        ]
+    },
+    {
+        "id": 40,
+        "inci_name": "Ethylhexylglycerin",
+        "chinese_name": "辛甘醇",
+        "category": "辅助防腐",
+        "functions": [
+            "辅助防腐",
+            "改善肤感"
+        ],
+        "risk_level": "低",
+        "description": "常作为防腐体系辅助成分。",
+        "suitable_skin_types": [
+            "普通皮肤"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 41,
+        "inci_name": "Cetearyl Alcohol",
+        "chinese_name": "鲸蜡硬脂醇",
+        "category": "乳化剂",
+        "functions": [
+            "改善产品质地",
+            "增加柔润感"
+        ],
+        "risk_level": "低",
+        "description": "虽然名字含有酒精，但属于脂肪醇，主要用于改善肤感和稳定配方。",
+        "suitable_skin_types": [
+            "干性皮肤",
+            "普通皮肤"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 42,
+        "inci_name": "Stearic Acid",
+        "chinese_name": "硬脂酸",
+        "category": "乳化剂",
+        "functions": [
+            "帮助形成乳霜质地",
+            "稳定配方"
+        ],
+        "risk_level": "低",
+        "description": "常见脂肪酸类配方成分。",
+        "suitable_skin_types": [
+            "干性皮肤"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 43,
+        "inci_name": "Glyceryl Stearate",
+        "chinese_name": "硬脂酸甘油酯",
+        "category": "乳化剂",
+        "functions": [
+            "帮助油水混合",
+            "提升产品顺滑度"
+        ],
+        "risk_level": "低",
+        "description": "常见乳霜类产品中的辅助成分。",
+        "suitable_skin_types": [
+            "所有肤质"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 44,
+        "inci_name": "Polysorbate 20",
+        "chinese_name": "聚山梨醇酯-20",
+        "category": "乳化剂",
+        "functions": [
+            "帮助成分混合",
+            "稳定产品"
+        ],
+        "risk_level": "低",
+        "description": "常用于护肤品和香氛产品中。",
+        "suitable_skin_types": [
+            "普通皮肤"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 45,
+        "inci_name": "Dimethicone",
+        "chinese_name": "聚二甲基硅氧烷",
+        "category": "肤感调节",
+        "functions": [
+            "形成柔滑肤感",
+            "减少皮肤粗糙感"
+        ],
+        "risk_level": "低",
+        "description": "常见硅类成分，主要改善使用体验，并不等同于刺激成分。",
+        "suitable_skin_types": [
+            "干性皮肤",
+            "敏感肌"
+        ],
+        "avoid_skin_types": [
+            "部分容易堵塞感明显的人群"
+        ]
+    },
+    {
+        "id": 46,
+        "inci_name": "Isopropyl Myristate",
+        "chinese_name": "肉豆蔻酸异丙酯",
+        "category": "润肤剂",
+        "functions": [
+            "提升柔滑感",
+            "改善延展性"
+        ],
+        "risk_level": "中",
+        "description": "常用于改善产品触感的油脂类成分。",
+        "suitable_skin_types": [
+            "干性皮肤"
+        ],
+        "avoid_skin_types": [
+            "容易长闭口人群"
+        ]
+    },
+    {
+        "id": 47,
+        "inci_name": "Sodium Lauryl Sulfate",
+        "chinese_name": "月桂基硫酸钠",
+        "category": "清洁剂",
+        "functions": [
+            "产生泡沫",
+            "去除油脂污垢"
+        ],
+        "risk_level": "中",
+        "description": "清洁力较强的表面活性剂，需根据配方整体判断。",
+        "suitable_skin_types": [
+            "耐受性较好的皮肤"
+        ],
+        "avoid_skin_types": [
+            "敏感肌",
+            "屏障受损肌肤"
+        ]
+    },
+    {
+        "id": 48,
+        "inci_name": "Sodium Cocoyl Isethionate",
+        "chinese_name": "椰油酰羟乙磺酸钠",
+        "category": "清洁剂",
+        "functions": [
+            "温和清洁",
+            "产生泡沫"
+        ],
+        "risk_level": "低",
+        "description": "常用于温和型洁面产品。",
+        "suitable_skin_types": [
+            "普通皮肤",
+            "干性皮肤"
+        ],
+        "avoid_skin_types": []
+    },
+    {
+        "id": 49,
+        "inci_name": "Cocamidopropyl Betaine",
+        "chinese_name": "椰油酰胺丙基甜菜碱",
+        "category": "清洁剂",
+        "functions": [
+            "辅助清洁",
+            "降低刺激感"
+        ],
+        "risk_level": "低",
+        "description": "常见两性表面活性剂，用于温和清洁配方。",
+        "suitable_skin_types": [
+            "普通皮肤"
+        ],
+        "avoid_skin_types": [
+            "少数敏感人群"
+        ]
+    },
+    {
+        "id": 50,
+        "inci_name": "Alcohol Denat.",
+        "chinese_name": "变性乙醇",
+        "category": "溶剂",
+        "functions": [
+            "帮助溶解成分",
+            "提升清爽肤感"
+        ],
+        "risk_level": "中",
+        "description": "酒精在不同配方中的作用不同，需要结合浓度和整体配方判断。",
+        "suitable_skin_types": [
+            "油性皮肤"
+        ],
+        "avoid_skin_types": [
+            "敏感肌",
+            "干性皮肤"
+        ]
+    }
 ]
