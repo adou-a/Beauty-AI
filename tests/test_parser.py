@@ -1,4 +1,4 @@
-from src.utils.text_parser import parser
+from .text_parser import parser
 
 
 def test_parser():

@@ -15,12 +15,12 @@ def test_find_ingredient():
 
 
 
-def test_find_by_effect():
+def test_find_by_category():
 
     repository = IngredientRepository()
     service = IngredientService(repository)
 
-    result = service.find_by_effect("抗氧化")
+    result = service.find_by_category("抗氧化")
 
     assert len(result) > 0
     assert "绿茶提取物" in [
