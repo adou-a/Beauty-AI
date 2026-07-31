@@ -10,7 +10,7 @@ router = APIRouter()
 
 @router.get('/{name}')
 
-def get_ingredient(name:str,service:IngredientService = Depends(get_ingredient_service)):
+def get_ingredient(name:str,service:IngredientService = Depends(get_ingredient_service),summary = '查询护肤成分',description ='根据中文名称查询成分信息'):
     try:
         result = service.find_ingredient(name)
     except IngredientDataError:
