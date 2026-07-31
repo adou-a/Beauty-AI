@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from src.services.ingredient_repository import IngredientRepository
 from src.services.ingredient_service import IngredientService
-from src.api.schemas import IngredientResponse
+from src.api.schemas import IngredientResponse , AnalyzeRequest
 
 app = FastAPI()
 repository = IngredientRepository()
@@ -23,3 +23,11 @@ def get_ingredient(name:str):
 
 
     return ingredient
+
+
+@app.post('/analyze')
+def analyze(request: AnalyzeRequest):
+    return{
+        'ingredient': request.ingredient,
+        'skin_type' :request.skin_type
+    }

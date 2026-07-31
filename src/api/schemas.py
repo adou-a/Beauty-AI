@@ -13,3 +13,9 @@ class IngredientResponse(BaseModel):
     description: str
     suitable_skin_types: list[str]
     avoid_skin_types: list[str]
+
+
+class AnalyzeRequest(BaseModel):
+
+    ingredient: str
+    skin_type: str
