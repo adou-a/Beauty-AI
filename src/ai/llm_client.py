@@ -1,19 +1,40 @@
-from ..config.settings import OPENAI_API_KEY
+from src.config.settings import DEEPSEEK_API_KEY
+from openai import OpenAI
+from openai import OpenAIError
 
 
 class LLMClient:
 
     def __init__(self) -> None:
-        self.api_key = OPENAI_API_KEY
+        self.client = OpenAI(api_key=DEEPSEEK_API_KEY,base_url='https://api.deepseek.com')
 
 
-    def generate(
-        self,
-        prompt: str
-    ) -> str:
 
-        """
-        调用大模型生成内容
-        """
+    def chat(self,message:str) -> str:
+        try:
+            response = self.client.chat.completions.create(
+                model = 'deepseek-chat',messages = [
 
-        raise NotImplementedError
+                    {
+                        "role":"system",
+                        "content":
+                        "你是一名专业护肤分析助手"
+                    },
+
+                    {
+                        "role":"user",
+                        "content":message
+                    }
+
+                ]
+
+            )
+            print(response)
+            return response.choices[0].message.content
+
+        except OpenAIError as e:
+            print(e)
+            raise
+        
+            
+        
