@@ -95,3 +95,5 @@ pip install -e .
 理解LLM与业务解耦
 2026-07-31
 Pydantic Model
+post
+API 与 Service 层正式整合
