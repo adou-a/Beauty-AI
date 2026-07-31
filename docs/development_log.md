@@ -93,3 +93,5 @@ pip install -e .
 获得能力：
 理解Python分层架构
 理解LLM与业务解耦
+2026-07-31
+Pydantic Model
