@@ -1,9 +1,9 @@
-from  fastapi import APIRouter
-from fastapi import Depends
+from  src.exceptions.ingredient_exception import IngredientDataError
 from  src.services.ingredient_service import IngredientService
 from  src.api.dependencies import get_ingredient_service
 from  fastapi import HTTPException
-from  src.exceptions.ingredient_exception import IngredientDataError
+from  fastapi import APIRouter
+from fastapi import Depends
 
 router = APIRouter()
 

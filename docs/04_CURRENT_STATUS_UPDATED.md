@@ -8,7 +8,11 @@ Phase 1 Python Engineering
 
 Phase 2 FastAPI Backend
 
-## 当前结构
+正在进行：
+
+Phase 3 LLM Engineering
+
+## 当前项目结构
 
 ``` text
 src
@@ -34,33 +38,38 @@ src
 └── utils
 ```
 
-## 下一步
+## 当前AI能力
 
-进入 Phase 3:
+Beauty-AI 已经具备：
 
-LLM Engineering
+-   FastAPI接口
+-   DeepSeek模型调用
+-   Prompt设计
+-   本地成分数据融合
+-   Structured Output
+-   LLM异常处理
+-   Logging
+
+## 下一阶段
+
+进入：
+
+Phase 4 AI Agent Core
 
 目标：
 
-用户问题
+让Beauty-AI从AI应用升级为AI Agent。
 
-↓
+学习：
 
-FastAPI
+-   Agent Loop
+-   Planning
+-   Tool Calling
+-   自主决策流程
 
-↓
+## 后续开发原则
 
-AIService
-
-↓
-
-LLMClient
-
-↓
-
-生成结构化AI护肤分析
-
-后续每天：
+每天：
 
 -   明确学习目标
 -   明确代码任务
