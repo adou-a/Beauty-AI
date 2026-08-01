@@ -1,8 +1,12 @@
-from src.config.settings import DEEPSEEK_API_KEY
+from src.config.settings import (DEEPSEEK_API_KEY,DEEPSEEK_MODEL)
+from src.exceptions.llm_exception import (LLMConnectionError,LLMResponseError)
 from openai import OpenAI
-from openai import OpenAIError
+import logging
 
 
+
+
+logger = logging.getLogger(__name__)
 class LLMClient:
 
     def __init__(self) -> None:
@@ -12,8 +16,9 @@ class LLMClient:
 
     def chat(self,prompt:str) -> str:
         try:
+            logger.info('sending request to LLM')
             response = self.client.chat.completions.create(
-                model = 'deepseek-chat',messages = [
+                model = DEEPSEEK_MODEL,messages = [
 
                     {
                         "role":"system",
@@ -35,12 +40,19 @@ class LLMClient:
                 ]
 
             )
-            
-            return response.choices[0].message.content
+            content = response.choices[0].message.content
+            if not content:
+                logger.error('LLM request failed')
+                raise LLMResponseError('LLM returned empty response')
 
-        except OpenAIError as e:
-            print(e)
-            raise
+
+            logger.info('LLM response received')
+            return content
+
+        except Exception as e:
+            logger.error(f'LLM request failed: {e}')
+
+            raise LLMConnectionError('LLM service unavailable')
         
             
         

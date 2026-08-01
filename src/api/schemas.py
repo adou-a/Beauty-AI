@@ -19,3 +19,4 @@ class AnalyzeRequest(BaseModel):
 
     ingredient: str
     skin_type: str
+

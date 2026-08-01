@@ -1,6 +1,7 @@
 from src.ai.llm_client import LLMClient
 from src.services.ingredient_service import IngredientService
-
+from src.ai.ai_response import IngredientAnalysis
+import json
 
 
 
@@ -10,7 +11,7 @@ class AIService:
         self.ingredient_service = ingredient_service
 
 
-    def analyze_ingrdient(self,name:str) -> str:
+    def analyze_ingrdient(self,name:str) -> IngredientAnalysis:
 
         ingredient = self.ingredient_service.find_ingredient(name)
         if ingredient is None:
@@ -42,26 +43,27 @@ INCI名称:
 
 '''    
         prompt = f'''
-    请根据一下数据库信息分析：
-    {context}
+根据以下成分数据库：
+{context}
 
-    用户想了解成分：
-    {name}
-    输出：
-    1.成分作用
-    2.适合肤质
-    3.使用注意
-    4.简单建议
 
-    控制在300字以内
+请严格返回JSON 格式
+{{
+'ingredient': '',
+'benefits': [],
+'suitable_skin_types': [],
+'risks': '',
+'suggestion':''
+}}
+
 
 '''
-
-
-
-    
         response = self.client.chat(prompt)
-        return response
+       
+        data = json.loads(response)
+        analysis = IngredientAnalysis(**data)
+
+        return analysis
 
 
 
