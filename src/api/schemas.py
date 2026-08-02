@@ -18,4 +18,12 @@ class IngredientResponse(BaseModel):
 class AnalyzeRequest(BaseModel):
 
     ingredient: str
-    
+
+
+class Suitable_type(BaseModel):
+    ingredient: str
+    check_skin_type: str
+
+
+
+

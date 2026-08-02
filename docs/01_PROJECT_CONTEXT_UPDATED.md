@@ -34,6 +34,7 @@ Beauty-AI 是 AI Agent Developer Roadmap 的主实践项目。
 
 -   Phase 1 Python Engineering
 -   Phase 2 FastAPI Backend
+-   Phase 3 LLM Engineering
 
 已完成能力：
 
@@ -47,7 +48,7 @@ Beauty-AI 是 AI Agent Developer Roadmap 的主实践项目。
 
 当前进入：
 
-Phase 3 LLM Engineering
+Phase 4 AI Agent Core
 
 目标：
 

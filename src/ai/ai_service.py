@@ -1,6 +1,6 @@
-from src.ai.llm_client import LLMClient
 from src.services.ingredient_service import IngredientService
 from src.ai.ai_response import IngredientAnalysis
+from src.ai.llm_client import LLMClient
 import json
 
 
@@ -64,6 +64,48 @@ INCI名称:
         analysis = IngredientAnalysis(**data)
 
         return analysis
+    def ingredient_suitable_types(self,name:str,skin_type:str):
+        ingredient = self.ingredient_service.find_ingredient(name)
+        if ingredient is None:
+            return '没有找到该成分'
+        context = f'''
+成分信息：
+中文名称：
+{ingredient.chinese_name}
+
+INCI名称:
+{ingredient.inci_name}
+
+种类:
+{ingredient.category}
+
+作用：
+{ingredient.functions}
+
+描述：
+{ingredient.description}
+
+适合肤质：
+{ingredient.suitable_skin_types}
+
+风险：
+{ingredient.risk_level}
+
+'''    
+        prompt = f'''
+请根据一下成分资料回答用户问题
+{context}
+请严格返回：
+{name}主要作用：
+适合的肤质和注意事项
+
+
+'''       
+        result = self.client.chat(prompt)
+        return result
+        
+
+        
 
 
 

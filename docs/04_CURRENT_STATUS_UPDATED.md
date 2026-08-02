@@ -10,7 +10,7 @@ Phase 2 FastAPI Backend
 
 正在进行：
 
-Phase 3 LLM Engineering
+Phase 4 AI Agent Core
 
 ## 当前项目结构
 
