@@ -1,7 +1,7 @@
 from src.services.ingredient_service import IngredientService
 
 
-class IngredientTool:
+class IngredientSearchTool:
 
     def __init__(self,service:IngredientService):
         self.serivice = service

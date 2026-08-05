@@ -18,3 +18,6 @@ class ToolRegistry:
 
     def get(self,name):
         return self.tools.get(name)
+
+    def exists(self,name):
+        return name in self.tools

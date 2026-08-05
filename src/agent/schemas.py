@@ -1,4 +1,4 @@
-ingredient_tool = {
+ingredient_tool_schema = {
 'type': 'function',
 'function':{
 'name': 'search_ingredient',

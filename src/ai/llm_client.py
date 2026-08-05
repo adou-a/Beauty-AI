@@ -15,44 +15,32 @@ class LLMClient:
 
 
     def chat(self,message:str,tools = None) -> str:
-        # try:
-            logger.info('sending request to LLM')
-            response = self.client.chat.completions.create(
-                model = DEEPSEEK_MODEL,messages = [
+    
+        logger.info('sending request to LLM')
+        response = self.client.chat.completions.create(
+            model = DEEPSEEK_MODEL,messages = [
 
-                    {
-                        "role":"system",
-                        "content":
-                        '''
-                        你是一名专业护肤分析助手
-                        回答要求：
-                        -客观分析护肤成分
-                        -不夸大功效
-                        -使用普通用户能理解的语言
-                        -不代替医生诊
-                        '''
-                    },
-                    {
-                        "role":"user",
-                        "content":message
-                    }
+                {
+                    "role":"system",
+                    "content":
+                    '''
+                    你是一名专业护肤分析助手
+                    回答要求：
+                    -客观分析护肤成分
+                    -不夸大功效
+                    -使用普通用户能理解的语言
+                    -不代替医生诊
+                    '''
+                },
+                {
+                    "role":"user",
+                    "content":message
+                }
 
-                ],tools= tools
+            ],tools= tools
 
-            )
-            return response.choices[0].message
-        #     if not content:
-        #         logger.error('LLM request failed')
-        #         raise LLMResponseError('LLM returned empty response')
+        )
+        return response.choices[0].message
 
-
-        #     logger.info('LLM response received')
-        #     return content
-
-        # except Exception as e:
-        #     logger.error(f'LLM request failed: {e}')
-
-        #     raise LLMConnectionError('LLM service unavailable')
-        
             
         
