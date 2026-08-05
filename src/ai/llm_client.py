@@ -14,8 +14,8 @@ class LLMClient:
 
 
 
-    def chat(self,prompt:str) -> str:
-        try:
+    def chat(self,message:str,tools = None) -> str:
+        # try:
             logger.info('sending request to LLM')
             response = self.client.chat.completions.create(
                 model = DEEPSEEK_MODEL,messages = [
@@ -34,25 +34,25 @@ class LLMClient:
                     },
                     {
                         "role":"user",
-                        "content":prompt
+                        "content":message
                     }
 
-                ]
+                ],tools= tools
 
             )
-            content = response.choices[0].message.content
-            if not content:
-                logger.error('LLM request failed')
-                raise LLMResponseError('LLM returned empty response')
+            return response.choices[0].message
+        #     if not content:
+        #         logger.error('LLM request failed')
+        #         raise LLMResponseError('LLM returned empty response')
 
 
-            logger.info('LLM response received')
-            return content
+        #     logger.info('LLM response received')
+        #     return content
 
-        except Exception as e:
-            logger.error(f'LLM request failed: {e}')
+        # except Exception as e:
+        #     logger.error(f'LLM request failed: {e}')
 
-            raise LLMConnectionError('LLM service unavailable')
+        #     raise LLMConnectionError('LLM service unavailable')
         
             
         

@@ -1,17 +1,13 @@
-from src.agent.agent import BeautyAgent
-from src.agent.tools  import search_ingredient
+from src.agent.main import agent
+
+def test_agent():
+    result = agent.run('烟酰胺适合油皮吗')
+    print(result)
 
 
 
-
-tools = {
-    'search_ingredient':search_ingredient
-
-}
-
-agent = BeautyAgent(tools)
+if __name__ =='__main__':
+    test_agent()
 
 
-result = agent.run('查询烟酰胺这个成分')
 
-print(result)

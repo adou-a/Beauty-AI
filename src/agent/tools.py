@@ -1,9 +1,14 @@
-def search_ingredient(name:str):
+from src.services.ingredient_service import IngredientService
 
-    return{
-        'ingredient':name,
-        'effect':[
-            '保湿',
-            '改善肤色'
-        ]
-    }
+
+class IngredientTool:
+
+    def __init__(self,service:IngredientService):
+        self.serivice = service
+
+    def search_ingredient(self,name:str):
+
+        ingredient = (self.serivice.find_ingredient(name))
+
+
+        return ingredient

@@ -1,15 +1,40 @@
+from src.ai.llm_client import LLMClient
+
+
+
+
+
 class BeautyAgent:
 
-    def __init__(self,tools):
+    def __init__(self,tools,llm:LLMClient,executor):
         self.tools = tools
+        self.llm  = llm
+        
+        self.executor = executor
 
 
     def run(self,user_input:str):
-        print('Thinking...')
-        if '成分' in user_input:
-            result = (self.tools['search_ingredient']('烟酰胺'))
-            print('Observation: ',result)
-            return result
+
+        
+        response = self.llm.chat(user_input,self.tools)
+
+        if response.tool_calls:
+            result = self.executor.execute(response.tool_calls[0])
+            
+            final_response = (self.llm.chat(f'''
+           用户问题：
+           {user_input}
+           工具返回：
+           {result}
+           请回答用户
+           ''')
+                             )
+
+            return final_response.content
 
 
-        return '无法处理'
+        return response.content    
+
+     
+
+        
