@@ -12,3 +12,11 @@ class IngredientSearchTool:
 
 
         return ingredient
+
+
+    def check_skin_risk(self,skin_type:str):
+
+        return{
+            'skin_type': skin_type,
+            'risk': '需要注意刺激性'
+        }

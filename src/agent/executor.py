@@ -1,5 +1,5 @@
 import json
-
+from src.exceptions.agent_exception import ToolNotFoundError
 class ToolExecutor:
 
     def __init__(self,registry):
@@ -20,8 +20,12 @@ class ToolExecutor:
         #根据名字找到函数
 
         tool = (self.registry.get(tool_name))
+        if tool is None:
+            raise ToolNotFoundError('tool not found')
 
 
+        print('Tool object: ',tool)
+        print('Tool type: ', type(tool))
         #执行函数
         result = tool(**arguments)
 

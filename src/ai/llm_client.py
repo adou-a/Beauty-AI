@@ -14,32 +14,14 @@ class LLMClient:
 
 
 
-    def chat(self,message:str,tools = None) -> str:
+    def chat(self,messages:list,tools = None) -> str:
     
         logger.info('sending request to LLM')
         response = self.client.chat.completions.create(
-            model = DEEPSEEK_MODEL,messages = [
-
-                {
-                    "role":"system",
-                    "content":
-                    '''
-                    你是一名专业护肤分析助手
-                    回答要求：
-                    -客观分析护肤成分
-                    -不夸大功效
-                    -使用普通用户能理解的语言
-                    -不代替医生诊
-                    '''
-                },
-                {
-                    "role":"user",
-                    "content":message
-                }
-
-            ],tools= tools
-
-        )
+            model = DEEPSEEK_MODEL,
+            messages = messages,
+            tools= tools
+            )
         return response.choices[0].message
 
             

@@ -15,3 +15,19 @@ ingredient_tool_schema = {
 }
 }
 }
+
+search_ingredient_schema = {'type': 'function','function': {
+    'name': 'check_skin_risk',
+    'description': '提醒皮肤需要注意刺激性',
+    'parameters':{
+        'type': 'object',
+        'properties':{
+            'skin_type':{
+                'type': 'string',
+                'description': '肤质类型'
+            }
+        },
+        'required': ['skin_type']
+    }
+}
+}
