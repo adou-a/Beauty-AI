@@ -1,7 +1,7 @@
 from src.agent.main import agent
 
 def test_agent():
-    result = agent.run('油敏肌可以使用A醇吗')
+    result = agent.run('我是油敏肌，晚上想用烟酰胺，帮我分析一下')
     print(result)
 
 
