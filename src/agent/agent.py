@@ -61,7 +61,7 @@ class BeautyAgent:
                 for tool_call in response.tool_calls:
                     try:
                         result = self.executor.execute(tool_call)
-                        logger.info('Tool result received: %s',tool_call.function.name)
+                        logger.info('Tool completed: %s',tool_call.function.name)
 
                         memory.add_message(
                             {

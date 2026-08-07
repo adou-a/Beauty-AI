@@ -38,6 +38,7 @@ class ToolExecutor:
             raise ToolNotFoundError('tool not found')
 
         logger.info('Executor found tool: %s',tool_name)
+        logger.inof('Executing tool: %s',tool_name)
 
         #执行函数
         try:

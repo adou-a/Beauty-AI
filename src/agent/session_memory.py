@@ -16,5 +16,6 @@ class MemoryStore:
             logger.info("Create new session: %s",session_id)
             self.sessions[session_id] = ConversationMemory()
 
-
+        else:
+            logger.info('Load existing session: %s', session_id)
         return self.sessions[session_id]
