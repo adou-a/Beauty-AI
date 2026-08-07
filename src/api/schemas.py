@@ -27,7 +27,7 @@ class Suitable_type(BaseModel):
 
 
 class AgentRequest(BaseModel):
-
+    session_id: str
     message: str
 
 

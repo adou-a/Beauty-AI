@@ -8,30 +8,23 @@ from src.utils.logger import get_logger
 logger = get_logger(__name__)
 class BeautyAgent:
 
-    def __init__(self,tools,llm:LLMClient,executor):
+    def __init__(self,tools,llm:LLMClient,executor,memory_store):
         self.tools = tools
         self.llm  = llm
-        
         self.executor = executor
+        self.memory_store = memory_store
 
-
-    def run(self,user_input:str):
+    def run(self,session_id:str,user_input:str):
         logger.info('Agent received user-input: %s',user_input)
-        messages = [
-            {
-                'role': 'system',
-                'content':
-                '''
-                你是一个专业护肤分析助手
-                你可以调用工具解决问题
-                '''
-            },
+        logger.info('Current session id: %s',session_id)
+        memory = self.memory_store.get_memory(session_id)
+        memory.add_message(
             {
                 'role': 'user',
                 'content': user_input
             }
-        ]
-
+        )
+        messages = memory.get_messages()
         while True:
             logger.info('Calling LLM')
             response = self.llm.chat(messages,self.tools)
@@ -58,7 +51,7 @@ class BeautyAgent:
 
 
                 
-                messages.append(
+                memory.add_message(
                     {
                         'role': 'assistant',
                         'tool_calls': assistant_tool_calls
@@ -70,7 +63,7 @@ class BeautyAgent:
                         result = self.executor.execute(tool_call)
                         logger.info('Tool result received: %s',tool_call.function.name)
 
-                        messages.append(
+                        memory.add_message(
                             {
                                 'role': 'tool',
                                 'tool_call_id': tool_call.id,
@@ -87,6 +80,10 @@ class BeautyAgent:
 
             else:
                 logger.info('Final answer generated')
+                memory.add_message({
+                    'role': 'assistant',
+                    'content': response.content
+                })
                 return response.content    
 
      

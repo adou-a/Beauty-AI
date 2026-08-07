@@ -11,7 +11,7 @@ router = APIRouter()
 @router.post('/',response_model=AgentResponse)
 def chat(request:AgentRequest,agent: BeautyAgent = Depends(get_agent)):
     try:
-        result =  agent.run(request.message)
+        result =  agent.run(request.session_id,request.message)
         return {'answer': result}
 
     except AgentExecutionError:
