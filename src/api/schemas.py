@@ -26,4 +26,15 @@ class Suitable_type(BaseModel):
 
 
 
+class AgentRequest(BaseModel):
+
+    message: str
+
+
+class AgentResponse(BaseModel):
+
+    answer: str
+
+
+
 

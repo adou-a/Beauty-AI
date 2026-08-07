@@ -8,3 +8,6 @@ class ToolNotFoundError(AgentError):
 
 class ToolExecutionError(AgentError):
     pass
+
+class AgentExecutionError(Exception):
+    pass

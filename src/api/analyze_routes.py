@@ -18,3 +18,7 @@ def ingredient_suitable_type(ingredient,check_skin_type:Suitable_type ,ai_servic
 
     result = ai_service.ingredient_suitable_types(ingredient,check_skin_type)
     return result
+
+
+
+
