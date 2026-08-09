@@ -13,3 +13,11 @@ class Chunk:
     content: str
     source: str
     index: int
+
+
+@dataclass
+class EmbeddedChunk:
+    content: str
+    source: str
+    index: int
+    vector: list[float]
