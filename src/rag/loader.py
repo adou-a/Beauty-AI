@@ -1,7 +1,7 @@
 from pathlib import Path
 from src.rag.models import Document
 
-#找所有符合的文件
+#找所有符合的文件,确定来源
 class DocumentLoader:
 
     def load_directory(self,directory:str) -> list[Document]:
