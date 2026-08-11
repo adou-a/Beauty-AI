@@ -23,23 +23,4 @@ def get_ai_service():
     llm = LLMClient()
     return AIService(ingredient_service,llm)
 
-memory_store = MemoryStore()
-def get_agent():
 
-    ingredient_service  = get_ingredient_service()
-    tool = IngredientSearchTool(ingredient_service)
-    registry = ToolRegistry()
-
-    registry.register('search_ingredient',tool.search_ingredient)
-    registry.register('check_skin_risk',tool.check_skin_risk)
-    executor = ToolExecutor(registry)
-
-    llm = get_llm_client()
-
-    tools = [ingredient_tool_schema,
-            search_ingredient_schema]
-
-   
-
-    agent = BeautyAgent(tools=tools,llm=llm,executor=executor,memory_store=memory_store)
-    return agent

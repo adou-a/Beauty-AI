@@ -31,3 +31,26 @@ search_ingredient_schema = {'type': 'function','function': {
     }
 }
 }
+
+
+search_knowledge_schema ={
+    'type': 'function',
+    'function':{
+        'name': 'search_knowledge',
+        'description':(
+            '从护肤专业知识库检索与用户问题相关的参考资料'
+            '适用于需要护肤原理、成分使用方法'
+            '成分风险、肤质护肤或复杂护肤知识的问题'
+        ),
+        'parameters': {
+            'type': 'object',
+            'properties': {
+                'query':{
+                    'type': 'string',
+                    'description':'需要从知识库检索的完整自然语言'
+                }
+            },
+            'required': ['query']
+        }
+    }
+}
