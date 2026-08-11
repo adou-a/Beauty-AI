@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
-from src.rag.models import EmbeddedChunk
+from src.rag.models import EmbeddedChunk,SearchResult
+from src.rag.similarity import cosine_similarity
+
 
 
 class VectorStore:
@@ -64,3 +66,22 @@ class VectorStore:
         for item in raw_data
         ]
         return self.items
+
+
+    def search(self,query_vector: list[float], top_k: int = 3) -> list[SearchResult]:
+        #结果取的数量应该大于0
+        if top_k <= 0:
+            raise('top_k must be greater than 0')
+
+        results = []
+
+        #取items里面的chunk
+        for chunk in self.items:
+            score = cosine_similarity(query_vector,chunk.vector)
+
+            result = SearchResult(chunk = chunk,score = score)
+            results.append(result)
+        #进行排序，按照关联分数排序
+        results.sort(key=lambda result: result.score,reverse=True)
+
+        return results[:top_k]

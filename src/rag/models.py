@@ -21,3 +21,8 @@ class EmbeddedChunk:
     source: str
     index: int
     vector: list[float]
+
+@dataclass
+class SearchResult:
+    chunk: EmbeddedChunk
+    score: float

@@ -7,7 +7,7 @@ from src.rag.indexer import KnowledgeIndexer
 
 loader = DocumentLoader()
 
-chunker = TextChunker(chunk_size=200, overlap=50)
+chunker = TextChunker(chunk_size=500, overlap=100)
 embedding_service = EmbeddingService()
 vector_store = VectorStore()
 indexer = KnowledgeIndexer(loader=loader,chunker=chunker,embedding_service=embedding_service,vector_store=vector_store)
