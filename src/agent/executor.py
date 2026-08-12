@@ -20,7 +20,7 @@ class ToolExecutor:
         tool_name = (tool_call.function.name)
         logger.info('Received tool call: %s',tool_name)
        
-        #获取参数
+        #获取传入函数的参数
         try:
             arguments = json.loads(tool_call.function.arguments)
             logger.info('Tool arguments parsed: %s',arguments)
