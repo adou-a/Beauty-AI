@@ -14,7 +14,7 @@ class LLMClient:
 
 
 
-    def chat(self,messages:list,tools = None) -> str:
+    def chat(self,messages:list,tools = None) :
     
         logger.info('sending request to LLM')
         response = self.client.chat.completions.create(
