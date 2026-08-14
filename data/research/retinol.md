@@ -12,3 +12,31 @@
 INCI
 类别
 同义词
+
+SOURCE:
+EU CosIng
+
+TOPIC:
+Retinol
+
+确认信息：
+
+INCI Name:
+RETINOL
+
+CAS:
+68-26-8
+11103-57-4
+
+EC:
+200-683-7
+234-328-2
+
+CosIng Function:
+Skin Conditioning - Miscellaneous
+
+Regulation:
+Annex III / 376
+
+SCCS:
+存在相关 Vitamin A Opinion
