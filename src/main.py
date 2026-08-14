@@ -10,6 +10,9 @@ from src.agent.schemas import (ingredient_tool_schema,search_knowledge_schema,se
 from src.rag.retriever import Retriever
 from src.rag.embedding import EmbeddingService
 from src.rag.vector_store import VectorStore
+from src.agent.planning.models import Plan,PlanStep
+from src.agent.planning.plan_executor import PlanExecutor
+from src.agent.planning.agent_step_executor import AgentStepExecutor
 ingredient_service = get_ingredient_service()
 tool = IngredientSearchTool(ingredient_service)
 
@@ -31,10 +34,68 @@ tools = [ingredient_tool_schema,search_ingredient_schema,search_knowledge_schema
 executor = ToolExecutor(registry)
 
 agent  = BeautyAgent(tools = tools,llm = llm,executor = executor,memory_store = memory_store)
-session_id = '002'
-user_input = ('我是敏感肌,最近开始使用视黄醇,有一点脱皮和刺痛,这种情况正常吗,需要注意什么？')
+plan = Plan(
+    goal="为敏感肌用户制定视黄醇耐受方案",
+    steps=[
+        PlanStep(
+            id=1,
+            description=(
+                "获取视黄醇的基础作用和刺激风险信息"
+            ),
+        ),
+        PlanStep(
+            id=2,
+            description=(
+                "分析敏感肌使用视黄醇的风险"
+            ),
+        ),
+        PlanStep(
+            id=3,
+            description=(
+                "检索视黄醇建立耐受的相关专业知识"
+            ),
+        ),
+    ],
+)
 
 
+step_executor = AgentStepExecutor(
+    agent=agent,
+    session_id="phase6-day4-real",
+    goal=plan.goal,
+)
 
-result =  agent.run(session_id  = session_id,user_input = user_input)
-print(result)
+
+plan_executor = PlanExecutor(
+    step_executor=step_executor,
+)
+
+
+completed_plan = (
+    plan_executor.execute(
+        plan
+    )
+)
+
+
+for step in completed_plan.steps:
+
+    print(
+        "\nStep:",
+        step.id,
+    )
+
+    print(
+        "Description:",
+        step.description,
+    )
+
+    print(
+        "Status:",
+        step.status,
+    )
+
+    print(
+        "Result:",
+        step.result,
+    )
