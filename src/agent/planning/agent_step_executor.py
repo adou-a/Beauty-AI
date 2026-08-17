@@ -6,6 +6,7 @@ from src.agent.planning.models import PlanStep
 
 
 
+
 class AgentRunner(Protocol):
 
     def run(self, session_id: str, user_input: str) -> str:
@@ -17,27 +18,18 @@ class AgentStepExecutionError(Exception):
 class AgentStepExecutor:
 
 
-    def __init__(self,agent: AgentRunner,session_id: str,goal: str):
-
-        if not session_id.strip():
-            raise ValueError('session_id cannot be empty')
-
-        if not goal.strip():
-            raise ValueError('goal cannot be empty')
-
-
+    def __init__(self,agent: AgentRunner):
         self.agent = agent
-        self.session_id = session_id
-        self.goal = goal
+       
+      
 
+    def execute(self,step: PlanStep,executor_context,goal) -> str:
 
-    def execute(self,step: PlanStep) -> str:
-
-        prompt = self._build_prompt(step)
+        prompt = self._build_prompt(step=step,goal=goal)
 
 
         try:
-            result = self.agent.run(self.session_id,prompt)
+            result = self.agent.run(executor_context.session_id,prompt)
 
 
         except Exception as exc:
@@ -60,13 +52,14 @@ class AgentStepExecutor:
     def _build_prompt(
             self,
             step: PlanStep,
+            goal
         ) -> str:
 
             return f"""
     你正在执行一个已经制定好的计划。
 
     整体目标：
-    {self.goal}
+    {goal}
 
     当前需要完成的步骤：
     {step.description}

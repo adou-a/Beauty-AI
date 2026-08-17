@@ -1,6 +1,6 @@
 from typing import Protocol
 from src.agent.planning.models import Plan,PlanStep,StepStatus
-
+from src.agent.workflow.workflowstatus import WorkflowState
 
 class PlanStepExecutor(Protocol):
 
@@ -16,10 +16,11 @@ class PlanExecutor:
 
         self.step_executor = step_executor
 
-    def execute(self,plan: Plan) -> Plan:
+    def execute(self,plan: Plan,executor_context,workflow_state:WorkflowState) -> Plan:
 
 
         for step in plan.steps:
+            workflow_state.current_step_id = step.id
             #跳过已经完成步骤
             if step.status == StepStatus.COMPLETED:
                 continue
@@ -27,20 +28,20 @@ class PlanExecutor:
             if step.status != StepStatus.PENDING:
 
                 continue
-
-            self._execute_step(step)
+            goal = plan.goal
+            self._execute_step(step,executor_context,goal)
 
 
 
         return plan
 
 
-    def _execute_step(self,step: PlanStep) -> None:
+    def _execute_step(self,step: PlanStep,executor_context,goal) -> None:
         step.status = StepStatus.RUNNING
 
         try:
 
-            result = self.step_executor.execute(step)
+            result = self.step_executor.execute(step,executor_context,goal)
 
         except Exception as exc:
 
