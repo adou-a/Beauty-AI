@@ -15,14 +15,19 @@ class WorkflowRunner:
         workflow_state = WorkflowState()
         workflow_state.start()
         try:
-            plan = self.plan_executor.execute(plan,executor_context,workflow_state)
+            executed_plan = self.plan_executor.execute(plan,executor_context,workflow_state)
         except Exception as exc:
             workflow_state.status = WorkflowStatus.FAILED
             workflow_state.error = str(exc)
             raise
         else:
             workflow_state.finish()
-        return plan
+        results = []
+        for step in executed_plan.steps:
+            if step.result:
+                results.append(step.result)
+
+        return results
 
         
         

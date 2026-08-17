@@ -8,6 +8,11 @@ from src.agent.agent import BeautyAgent
 from src.ai.ai_service import AIService
 from src.ai.llm_client import LLMClient
 from src.agent.session_memory import MemoryStore
+from src.agent.planning.agent_step_executor import AgentStepExecutor
+from src.agent.planning.gate import PlanningGate
+from src.agent.planning.plan_executor import PlanExecutor
+from src.agent.planning.planner import Planner
+from src.agent.workflow.workflowrunner import WorkflowRunner
 
 def get_ingredient_service():
     respository = IngredientRepository()
@@ -24,3 +29,35 @@ def get_ai_service():
     return AIService(ingredient_service,llm)
 
 
+def get_agent():
+    ingredient_service = get_ingredient_service()
+    ingredient_tool = IngredientSearchTool(ingredient_service)
+
+    registry = ToolRegistry()
+    registry.register("search_ingredient", ingredient_tool.search_ingredient)
+    registry.register("check_skin_risk", ingredient_tool.check_skin_risk)
+
+    return BeautyAgent(
+        tools=[ingredient_tool_schema, search_ingredient_schema],
+        llm=get_llm_client(),
+        executor=ToolExecutor(registry),
+        memory_store=MemoryStore(),
+    )
+
+
+def get_gate():
+    llm = get_llm_client()
+    agent = get_agent()
+    planner = Planner(llm=llm)
+    step_executor = AgentStepExecutor(agent=agent)
+    plan_executor = PlanExecutor(step_executor=step_executor)
+    workflow_runner = WorkflowRunner(
+        planner=planner,
+        planexecutor=plan_executor,
+    )
+
+    return PlanningGate(
+        llm=llm,
+        agent=agent,
+        workflow_runner=workflow_runner,
+    )

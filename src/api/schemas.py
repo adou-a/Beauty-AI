@@ -36,5 +36,11 @@ class AgentResponse(BaseModel):
     answer: str
 
 
+class PlangateRequest(BaseModel):
+    session_id: str
+    message: str
 
+class PlangateResponse(BaseModel):
+
+    answer: str
 
