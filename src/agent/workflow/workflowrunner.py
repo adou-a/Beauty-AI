@@ -3,13 +3,14 @@ from src.agent.planning.planner import Planner
 from src.agent.planning.plan_executor import PlanExecutor
 from src.agent.workflow.final_answer import FinalAnswer
 from src.agent.workflow.models import WorkflowResult
+from src.agent.workflow.validator import Validator
 class WorkflowRunner:
 
-    def __init__(self,planner:Planner,planexecutor:PlanExecutor,final_answer:FinalAnswer):
+    def __init__(self,planner:Planner,planexecutor:PlanExecutor,final_answer:FinalAnswer,validator:Validator):
         self.planner = planner
         self.plan_executor = planexecutor
         self.final_answer = final_answer
-
+        self.validator = validator
     def run(self,user_input,session_id) -> WorkflowResult:
         
         plan = self.planner.create_plan(user_input)
@@ -26,15 +27,17 @@ class WorkflowRunner:
 
             answer = self.final_answer.synthesis(
                 user_input=user_input,
-                results=results,
-            )
+                results=results,)
+
+            validation_result = self.validator.validate(user_input = user_input,goal = plan.goal,final_answer = answer)
+           
         except Exception as exc:
             workflow_state.status = WorkflowStatus.FAILED
             workflow_state.error = str(exc)
             raise
 
         workflow_state.finish()
-        return WorkflowResult(user_input = user_input,goal = plan.goal,final_answer = answer,step_results = results)
+        return WorkflowResult(user_input = user_input,goal = plan.goal,final_answer = answer,step_results = results,validation=validation_result)
        
         
         
