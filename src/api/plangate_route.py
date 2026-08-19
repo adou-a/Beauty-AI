@@ -25,9 +25,8 @@ def gate(
             session_id=request.session_id,
             user_input=request.message,
         )
-        logger.info(
-    f"Workflow result type={type(result)}"
-)
+
+
         return PlangateResponse(answer="\n\n".join(result))
     except Exception as exc:
         logger.exception("Planning gate execution failed")

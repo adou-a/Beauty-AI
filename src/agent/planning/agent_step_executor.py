@@ -1,6 +1,6 @@
 from typing import Protocol
 from src.agent.planning.models import PlanStep
-
+from src.agent.workflow.workflowrunner import ExecutorContext
 
 
 
@@ -23,7 +23,7 @@ class AgentStepExecutor:
        
       
 
-    def execute(self,step: PlanStep,executor_context,goal) -> str:
+    def execute(self,step: PlanStep,executor_context: ExecutorContext,goal: str) -> str:
 
         prompt = self._build_prompt(step=step,goal=goal)
 

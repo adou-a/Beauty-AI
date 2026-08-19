@@ -1,7 +1,7 @@
 from src.agent.planning.models import Plan,PlanStep
 #验证LLM返回格式的模型
 from src.agent.planning.schemas import PlanOutput
-
+from src.ai.llm_client import LLMClient
 
 #给规划LLM的系统指令
 PLANNER_SYSTEM_PROMPT = """
@@ -102,9 +102,9 @@ Planner 只负责前者。
 
 
 
-
+#依靠大模型来创建计划
 class Planner:
-    def __init__(self,llm):
+    def __init__(self,llm: LLMClient):
 
         self.llm = llm
 
