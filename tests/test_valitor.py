@@ -1,11 +1,13 @@
 from unittest.mock import patch
 
 import pytest
+from pydantic import ValidationError as PydanticValidationError
 
 from src.agent.planning.models import Plan, PlanStep
-from src.agent.workflow.models import ValidationResult, WorkflowResult
-from src.agent.workflow.validator import Validator
+from src.agent.workflow.models import  WorkflowResult
+from src.agent.validation.validator import ValidationError, Validator
 from src.agent.workflow.workflowrunner import WorkflowRunner
+from src.agent.validation.models import ValidationResult
 
 
 class FakePlanner:
@@ -109,7 +111,11 @@ def test_validator_system_failure_propagates_without_fake_result():
 
 
 def test_runner_calls_real_validator_and_returns_validated_result():
-    validator = Validator()
+    class ValidatorLLM:
+        def chat(self, messages):
+            return '{"success": true, "reasons": []}'
+
+    validator = Validator(ValidatorLLM())
     runner = create_runner(validator)
 
     with patch.object(
@@ -131,4 +137,135 @@ def test_runner_calls_real_validator_and_returns_validated_result():
         final_answer="final-answer-output",
         validation=ValidationResult(success=True, reasons=[]),
     )
-    
+
+
+def test_validator_rejects_reasons_when_success_is_true():
+    class InconsistentValidatorLLM:
+        def chat(self, messages):
+            return """{
+                "success": true,
+                "reasons": ["unexpected reason"]
+            }"""
+
+    validator = Validator(InconsistentValidatorLLM())
+
+    with pytest.raises(
+        ValidationError,
+        match="reasons for a successful validation",
+    ):
+        validator.validate(
+            user_input="original-user-input",
+            goal="planner-goal",
+            final_answer="final-answer-output",
+        )
+
+
+def test_validator_converts_llm_json_to_validation_result():
+    class JsonValidationLLM:
+        def chat(self, messages):
+            return """{
+                "success": false,
+                "reasons": ["missing risk analysis"]
+            }"""
+
+    validator = Validator(JsonValidationLLM())
+
+    result = validator.validate(
+        user_input="original-user-input",
+        goal="planner-goal",
+        final_answer="final-answer-output",
+    )
+
+    assert isinstance(result, ValidationResult)
+    assert result.success is False
+    assert result.reasons == ["missing risk analysis"]
+
+
+def test_validator_passes_complete_data_contract_to_llm():
+    class RecordingFakeLLM:
+        def __init__(self):
+            self.messages = None
+
+        def chat(self, messages):
+            self.messages = messages
+            return '{"success": true, "reasons": []}'
+
+    llm = RecordingFakeLLM()
+    validator = Validator(llm)
+
+    validator.validate(
+        user_input="original-user-input",
+        goal="planner-goal",
+        final_answer="final-answer-output",
+    )
+
+    assert llm.messages is not None
+    assert llm.messages[1]["role"] == "user"
+
+    content = llm.messages[1]["content"]
+    assert "original-user-input" in content
+    assert "planner-goal" in content
+    assert "final-answer-output" in content
+
+
+def test_validator_rejects_invalid_llm_output_structure():
+    class InvalidOutputLLM:
+        def chat(self, messages):
+            return "这个答案没有完成目标"
+
+    validator = Validator(InvalidOutputLLM())
+
+    with pytest.raises(PydanticValidationError):
+        validator.validate(
+            user_input="original-user-input",
+            goal="planner-goal",
+            final_answer="final-answer-output",
+        )
+
+
+def test_llm_failure_propagates_through_validator():
+    class FailingLLM:
+        def chat(self, messages):
+            raise RuntimeError("LLM failed")
+
+    validator = Validator(FailingLLM())
+
+    with pytest.raises(RuntimeError, match="LLM failed"):
+        validator.validate(
+            user_input="original-user-input",
+            goal="planner-goal",
+            final_answer="final-answer-output",
+        )
+
+def test_validator_rejects_string_instead_of_boolean():
+    class StringBooleanLLM:
+        def chat(self, messages):
+            return '{"success": "yes", "reasons": []}'
+
+    validator = Validator(StringBooleanLLM())
+
+    with pytest.raises(PydanticValidationError):
+        validator.validate(
+            user_input="original-user-input",
+            goal="planner-goal",
+            final_answer="final-answer-output",
+        )
+
+
+def test_validator_rejects_unexpected_fields():
+    class ExtraFieldLLM:
+        def chat(self, messages):
+            return """{
+                "success": false,
+                "reasons": ["缺少风险"],
+                "confidence": 0.8
+            }"""
+
+    validator = Validator(ExtraFieldLLM())
+
+    with pytest.raises(PydanticValidationError):
+        validator.validate(
+            user_input="original-user-input",
+            goal="planner-goal",
+            final_answer="final-answer-output",
+        )

@@ -1,8 +1,6 @@
-from pydantic import BaseModel
+from src.agent.validation.models import ValidationResult
 from dataclasses import dataclass
-class ValidationResult(BaseModel):
-    success: bool
-    reasons: list[str]
+
 
 
 @dataclass
@@ -11,5 +9,5 @@ class WorkflowResult():
     goal: str
     step_results: list[str]
     final_answer: str
-    validation:ValidationResult
+    validation: ValidationResult
 

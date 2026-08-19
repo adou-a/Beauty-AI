@@ -17,6 +17,8 @@ from src.agent.planning.agent_step_executor import AgentStepExecutor
 from src.agent.planning.gate import PlanningGate
 from src.agent.planning.plan_executor import PlanExecutor
 from src.agent.planning.planner import Planner
+from src.agent.validation.validator import Validator
+from src.agent.workflow.final_answer import FinalAnswer
 from src.agent.workflow.workflowrunner import WorkflowRunner
 from src.rag.embedding import EmbeddingService
 from src.rag.retriever import Retriever
@@ -74,9 +76,13 @@ def get_gate():
     planner = Planner(llm=llm)
     step_executor = AgentStepExecutor(agent=agent)
     plan_executor = PlanExecutor(step_executor=step_executor)
+    final_answer = FinalAnswer(llm=llm)
+    validator = Validator(llm=llm)
     workflow_runner = WorkflowRunner(
         planner=planner,
         planexecutor=plan_executor,
+        final_answer=final_answer,
+        validator=validator,
     )
 
     return PlanningGate(

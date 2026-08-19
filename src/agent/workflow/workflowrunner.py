@@ -3,7 +3,7 @@ from src.agent.planning.planner import Planner
 from src.agent.planning.plan_executor import PlanExecutor
 from src.agent.workflow.final_answer import FinalAnswer
 from src.agent.workflow.models import WorkflowResult
-from src.agent.workflow.validator import Validator
+from src.agent.validation.validator import Validator
 class WorkflowRunner:
 
     def __init__(self,planner:Planner,planexecutor:PlanExecutor,final_answer:FinalAnswer,validator:Validator):
