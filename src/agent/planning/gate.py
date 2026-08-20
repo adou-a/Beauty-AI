@@ -1,5 +1,6 @@
 from typing import Protocol
 
+from src.agent.workflow.models import WorkflowResult
 from src.utils.logger import get_logger
 
 
@@ -38,7 +39,7 @@ class DirectAgent(Protocol):
 
 
 class WorkflowRunnerProtocol(Protocol):
-    def run(self, user_input: str, session_id: str):
+    def run(self, user_input: str, session_id: str) -> WorkflowResult:
         ...
 
 
@@ -53,7 +54,7 @@ class PlanningGate:
         self.agent = agent
         self.workflow_runner = workflow_runner
 
-    def choice(self, user_input: str, session_id: str):
+    def choice(self, user_input: str, session_id: str) -> str:
         logger.info(
             "Planning gate received request session=%s",
             session_id,
@@ -94,10 +95,11 @@ class PlanningGate:
             "Planning gate routing to workflow runner session=%s",
             session_id,
         )
-        return self.workflow_runner.run(
+        workflow_result = self.workflow_runner.run(
             user_input=user_input,
             session_id=session_id,
         )
+        return workflow_result.final_answer
 
     def _build_messages(self, user_input: str) -> list[dict[str, str]]:
         return [

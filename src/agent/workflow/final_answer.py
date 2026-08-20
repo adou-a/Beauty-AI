@@ -7,7 +7,7 @@ class FinalAnswer:
     def __init__(self,llm):
         self.llm = llm
 
-    def synthesis(self,results,user_input):
+    def synthesis(self,results,user_input) -> str:
         message = self._bulit_prompt(results)
 
         messages=[
@@ -21,7 +21,9 @@ class FinalAnswer:
             }
         ]
         result = self.llm.chat(messages)
-        return result
+        if isinstance(result, str):
+            return result
+        return result.content
 
     def _bulit_prompt(self,results):
         return f'''

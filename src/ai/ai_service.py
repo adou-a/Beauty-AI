@@ -60,7 +60,7 @@ INCI名称:
 '''
         response = self.client.chat(prompt)
        
-        data = json.loads(response)
+        data = json.loads(response.content)
         analysis = IngredientAnalysis(**data)
 
         return analysis
@@ -103,10 +103,3 @@ INCI名称:
 '''       
         result = self.client.chat(prompt)
         return result
-        
-
-        
-
-
-
-    

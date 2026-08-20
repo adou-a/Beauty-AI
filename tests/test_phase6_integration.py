@@ -4,6 +4,8 @@ from src.agent.planning.agent_step_executor import AgentStepExecutor
 from src.agent.planning.gate import PlanningGate
 from src.agent.planning.models import Plan, PlanStep, StepStatus
 from src.agent.planning.plan_executor import PlanExecutionError, PlanExecutor
+from src.agent.validation.models import ValidationResult
+from src.agent.workflow.models import WorkflowResult
 from src.agent.workflow.workflowrunner import WorkflowRunner
 from src.agent.workflow.workflowstatus import WorkflowStatus
 
@@ -31,7 +33,23 @@ class RecordingWorkflowRunner:
 
     def run(self, user_input, session_id):
         self.calls.append((user_input, session_id))
-        return "workflow-result"
+        return WorkflowResult(
+            user_input=user_input,
+            goal="workflow-goal",
+            step_results=[],
+            final_answer="workflow-result",
+            validation=ValidationResult(success=True, reasons=[]),
+        )
+
+
+class FakeFinalAnswer:
+    def synthesis(self, user_input, results):
+        return "final-answer"
+
+
+class FakeValidator:
+    def validate(self, user_input, goal, final_answer):
+        return ValidationResult(success=True, reasons=[])
 
 
 class FakePlanner:
@@ -99,17 +117,22 @@ def test_workflow_executes_and_saves_all_three_steps():
     planner = FakePlanner()
     agent = RecordingAgent()
     plan_executor = StateCapturingPlanExecutor(AgentStepExecutor(agent))
-    runner = WorkflowRunner(planner=planner, planexecutor=plan_executor)
+    runner = WorkflowRunner(
+        planner=planner,
+        planexecutor=plan_executor,
+        final_answer=FakeFinalAnswer(),
+        validator=FakeValidator(),
+    )
 
-    result = runner.run("复杂护肤请求", "session-workflow")
+    runner.run("复杂护肤请求", "session-workflow")
 
     assert len(agent.calls) == 3
-    assert [step.status for step in result.steps] == [
+    assert [step.status for step in planner.plan.steps] == [
         StepStatus.COMPLETED,
         StepStatus.COMPLETED,
         StepStatus.COMPLETED,
     ]
-    assert [step.result for step in result.steps] == [
+    assert [step.result for step in planner.plan.steps] == [
         "agent-result-1",
         "agent-result-2",
         "agent-result-3",
@@ -128,7 +151,12 @@ def test_step_two_failure_stops_workflow_and_preserves_states():
     planner = FakePlanner()
     agent = FailingOnSecondStepAgent()
     plan_executor = StateCapturingPlanExecutor(AgentStepExecutor(agent))
-    runner = WorkflowRunner(planner=planner, planexecutor=plan_executor)
+    runner = WorkflowRunner(
+        planner=planner,
+        planexecutor=plan_executor,
+        final_answer=FakeFinalAnswer(),
+        validator=FakeValidator(),
+    )
 
     with pytest.raises(PlanExecutionError):
         runner.run("复杂护肤请求", "session-failure")

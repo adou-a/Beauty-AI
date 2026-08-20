@@ -4,6 +4,7 @@ from src.agent.planning.models import Plan, PlanStep
 from src.agent.workflow.final_answer import FinalAnswer
 from src.agent.workflow.workflowrunner import WorkflowRunner
 from src.agent.workflow.workflowstatus import WorkflowStatus
+from src.agent.validation.models import ValidationResult
 
 
 class FakeLLM:
@@ -38,11 +39,17 @@ class FakePlanExecutor:
         return plan
 
 
+class FakeValidator:
+    def validate(self, user_input, goal, final_answer):
+        return ValidationResult(success=True, reasons=[])
+
+
 def create_runner(llm):
     return WorkflowRunner(
         planner=FakePlanner(),
         planexecutor=FakePlanExecutor(),
         final_answer=FinalAnswer(llm),
+        validator=FakeValidator(),
     )
 
 
@@ -50,9 +57,9 @@ def test_runner_answer_matches_final_answer_output():
     llm = FakeLLM(answer="这是最终综合回答")
     runner = create_runner(llm)
 
-    answer = runner.run("请给我最终建议", "session-final-answer")
+    result = runner.run("请给我最终建议", "session-final-answer")
 
-    assert answer == "这是最终综合回答"
+    assert result.final_answer == "这是最终综合回答"
 
 
 def test_final_answer_receives_user_input_and_step_results():
@@ -86,6 +93,7 @@ def test_final_answer_error_propagates_through_runner():
         planner=FakePlanner(),
         planexecutor=plan_executor,
         final_answer=final_answer,
+        validator=FakeValidator(),
     )
 
     with pytest.raises(RuntimeError, match="final-answer failed"):
@@ -113,6 +121,7 @@ def test_final_answer_is_not_called_when_plan_executor_fails():
         planner=FakePlanner(),
         planexecutor=FailingPlanExecutor(),
         final_answer=FinalAnswer(llm),
+        validator=FakeValidator(),
     )
 
     with pytest.raises(RuntimeError, match="plan executor failed"):

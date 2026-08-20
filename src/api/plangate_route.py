@@ -27,7 +27,7 @@ def gate(
         )
 
 
-        return PlangateResponse(answer="\n\n".join(result))
+        return PlangateResponse(answer=result)
     except Exception as exc:
         logger.exception("Planning gate execution failed")
         raise HTTPException(

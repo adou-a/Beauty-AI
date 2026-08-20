@@ -14,8 +14,15 @@ class LLMClient:
 
 
 
-    def chat(self,messages:list,tools = None) :
-    
+    def chat(self, messages: list[dict[str, str]] | str, tools=None):
+        if isinstance(messages, str):
+            messages = [
+                {
+                    'role': 'user',
+                    'content': messages,
+                }
+            ]
+
         logger.info('sending request to LLM')
         response = self.client.chat.completions.create(
             model = DEEPSEEK_MODEL,
@@ -23,6 +30,3 @@ class LLMClient:
             tools= tools
             )
         return response.choices[0].message
-
-            
-        

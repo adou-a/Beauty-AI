@@ -2,6 +2,8 @@ import pytest
 
 from src.agent.planning.models import Plan, PlanStep
 from src.agent.planning.plan_executor import PlanExecutor
+from src.agent.validation.models import ValidationResult
+from src.agent.workflow.models import WorkflowResult
 from src.agent.workflow.workflowrunner import WorkflowRunner
 from src.agent.workflow.workflowstatus import WorkflowStatus
 
@@ -26,6 +28,16 @@ class FakePlanExecutor:
         return plan
 
 
+class FakeFinalAnswer:
+    def synthesis(self, user_input, results):
+        return "final-answer"
+
+
+class FakeValidator:
+    def validate(self, user_input, goal, final_answer):
+        return ValidationResult(success=True, reasons=[])
+
+
 def test_workflow_input_becomes_plan_then_executes_and_returns():
     plan = Plan(
         goal="制定护肤方案",
@@ -33,14 +45,21 @@ def test_workflow_input_becomes_plan_then_executes_and_returns():
     )
     planner = FakePlanner(plan)
     executor = FakePlanExecutor()
-    runner = WorkflowRunner(planner=planner, planexecutor=executor)
+    runner = WorkflowRunner(
+        planner=planner,
+        planexecutor=executor,
+        final_answer=FakeFinalAnswer(),
+        validator=FakeValidator(),
+    )
 
     result = runner.run("我的皮肤容易泛红", "session-001")
 
     assert planner.received_input == "我的皮肤容易泛红"
     assert executor.received_plan is plan
-    assert result is plan
-    assert result.steps[0].result == "执行结果"
+    assert isinstance(result, WorkflowResult)
+    assert result.step_results == ["执行结果"]
+    assert result.final_answer == "final-answer"
+    assert plan.steps[0].result == "执行结果"
 
 
 def test_planner_failure_is_not_reported_as_success():
@@ -51,6 +70,8 @@ def test_planner_failure_is_not_reported_as_success():
     runner = WorkflowRunner(
         planner=FailingPlanner(),
         planexecutor=FakePlanExecutor(),
+        final_answer=FakeFinalAnswer(),
+        validator=FakeValidator(),
     )
 
     with pytest.raises(RuntimeError, match="planner failed"):
@@ -70,6 +91,8 @@ def test_executor_failure_propagates_to_caller():
     runner = WorkflowRunner(
         planner=FakePlanner(plan),
         planexecutor=FailingExecutor(),
+        final_answer=FakeFinalAnswer(),
+        validator=FakeValidator(),
     )
 
     with pytest.raises(RuntimeError, match="executor failed"):
@@ -91,6 +114,8 @@ def test_workflow_is_running_when_executor_starts():
     runner = WorkflowRunner(
         planner=FakePlanner(plan),
         planexecutor=executor,
+        final_answer=FakeFinalAnswer(),
+        validator=FakeValidator(),
     )
 
     runner.run("用户输入", "session-001")
@@ -113,6 +138,8 @@ def test_workflow_is_failed_after_executor_failure():
     runner = WorkflowRunner(
         planner=FakePlanner(plan),
         planexecutor=executor,
+        final_answer=FakeFinalAnswer(),
+        validator=FakeValidator(),
     )
 
     with pytest.raises(RuntimeError, match="executor failed"):
@@ -154,6 +181,8 @@ def test_current_step_id_changes_during_plan_execution():
     runner = WorkflowRunner(
         planner=FakePlanner(plan),
         planexecutor=executor,
+        final_answer=FakeFinalAnswer(),
+        validator=FakeValidator(),
     )
 
     runner.run("用户输入", "session-001")

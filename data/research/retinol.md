@@ -1,42 +1,27 @@
-主题 Retinol/视黄醇
-一、定义主题需要回答的问题
-1.是什么
-2.有什么作用
-3.有什么风险
-4.谁需要注意
-5.怎么使用
-6.有什么监管信息
-二、建立标准身份Identity
-中文名
-英文名
-INCI
-类别
-同义词
+原料：视黄醇
 
-SOURCE:
-EU CosIng
+A. 中国规范名称：视黄醇
+B. INCI：RETINOL
+C. 常见俗称：
+D. 中国监管状态：
+E. 中国使用限制：
+F. 功效：
+G. 作用机制：
+H. 已知风险：
+I. 特殊人群：
+J. 消费者使用建议：
+K. 来源：
 
-TOPIC:
-Retinol
+ingredient:
+  chinese_name: 视黄醇
+  inci_name: RETINOL
+  catalogue_id: "06162"
+  catalogue: 已使用化妆品原料目录Ⅰ
 
-确认信息：
+source: 化妆品安全技术规范（2015年版）
+search_term:
+  - 视黄醇
+  - RETINOL
 
-INCI Name:
-RETINOL
-
-CAS:
-68-26-8
-11103-57-4
-
-EC:
-200-683-7
-234-328-2
-
-CosIng Function:
-Skin Conditioning - Miscellaneous
-
-Regulation:
-Annex III / 376
-
-SCCS:
-存在相关 Vitamin A Opinion
+result:
+  未直接检索到相关条目
