@@ -1,6 +1,6 @@
 import pytest
 
-from src.agent.planning.models import Plan, PlanStep
+from src.agent.planning.models import Plan, PlanStep, StepStatus
 from src.agent.planning.plan_executor import PlanExecutor
 from src.agent.validation.models import ValidationResult
 from src.agent.workflow.models import WorkflowResult
@@ -25,6 +25,7 @@ class FakePlanExecutor:
     def execute(self, plan, executor_context, workflow_state):
         self.received_plan = plan
         plan.steps[0].result = "执行结果"
+        plan.steps[0].status = StepStatus.COMPLETED
         return plan
 
 
@@ -108,6 +109,7 @@ def test_workflow_is_running_when_executor_starts():
     class StatusRecordingExecutor:
         def execute(self, plan, executor_context, workflow_state):
             self.status_when_called = workflow_state.status
+            plan.steps[0].status = StepStatus.COMPLETED
             return plan
 
     executor = StatusRecordingExecutor()
@@ -146,6 +148,55 @@ def test_workflow_is_failed_after_executor_failure():
         runner.run("用户输入", "session-001")
 
     assert executor.workflow_state.status == WorkflowStatus.FAILED
+
+
+def test_workflow_fails_when_any_step_is_not_completed():
+    plan = Plan(
+        goal="制定护肤方案",
+        steps=[
+            PlanStep(id=1, description="分析用户需求", status=StepStatus.COMPLETED),
+            PlanStep(id=2, description="生成护肤建议", status=StepStatus.FAILED),
+            PlanStep(id=3, description="检查最终方案", status=StepStatus.PENDING),
+        ],
+    )
+
+    class IncompletePlanExecutor:
+        def execute(self, plan, executor_context, workflow_state):
+            self.workflow_state = workflow_state
+            return plan
+
+    class RecordingFinalAnswer:
+        def __init__(self):
+            self.called = False
+
+        def synthesis(self, user_input, results):
+            self.called = True
+            return "final-answer"
+
+    class RecordingValidator:
+        def __init__(self):
+            self.called = False
+
+        def validate(self, user_input, goal, final_answer):
+            self.called = True
+            return ValidationResult(success=True, reasons=[])
+
+    executor = IncompletePlanExecutor()
+    final_answer = RecordingFinalAnswer()
+    validator = RecordingValidator()
+    runner = WorkflowRunner(
+        planner=FakePlanner(plan),
+        planexecutor=executor,
+        final_answer=final_answer,
+        validator=validator,
+    )
+
+    with pytest.raises(RuntimeError, match="not all plan steps are completed"):
+        runner.run("用户输入", "session-incomplete")
+
+    assert executor.workflow_state.status == WorkflowStatus.FAILED
+    assert final_answer.called is False
+    assert validator.called is False
 
 
 def test_current_step_id_changes_during_plan_execution():

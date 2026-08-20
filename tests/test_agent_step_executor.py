@@ -3,6 +3,7 @@ import pytest
 from src.agent.planning.models import PlanStep,Plan,StepStatus
 from src.agent.planning.plan_executor import PlanExecutor,PlanExecutionError
 from src.agent.planning.agent_step_executor import AgentStepExecutionError,AgentStepExecutor
+from src.exceptions.agent_exception import ToolExecutionError
 
 
 class FakeAgent:
@@ -158,6 +159,48 @@ class FailingFakeAgent:
         raise RuntimeError(
             "fake agent failure"
         )
+
+
+class ToolExecutionFailingAgent:
+
+    def run(
+        self,
+        session_id: str,
+        user_input: str,
+    ) -> str:
+
+        raise ToolExecutionError(
+            "tool execution failed"
+        )
+
+
+def test_tool_execution_error_is_wrapped():
+
+    executor = AgentStepExecutor(
+        agent=ToolExecutionFailingAgent(),
+    )
+
+    step = PlanStep(
+        id=1,
+        description="test step",
+    )
+
+    class ExecutorContext:
+        session_id = "workflow-001"
+
+    with pytest.raises(
+        AgentStepExecutionError
+    ) as exc_info:
+        executor.execute(
+            step,
+            ExecutorContext(),
+            "test goal",
+        )
+
+    assert isinstance(
+        exc_info.value.__cause__,
+        ToolExecutionError,
+    )
 
 def test_agent_failure_is_wrapped():
 

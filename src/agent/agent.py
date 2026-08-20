@@ -73,7 +73,7 @@ class BeautyAgent:
                         )
                     except ToolExecutionError as e:
                         logger.error('Agent tool failed: %s',e)
-                        return '工具暂时不可用'
+                        raise
                 continue
 
                 

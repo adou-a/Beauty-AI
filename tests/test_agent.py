@@ -1,5 +1,5 @@
 from src.agent.agent import BeautyAgent
-from src.exceptions.agent_exception import ToolNotFoundError
+from src.exceptions.agent_exception import ToolExecutionError, ToolNotFoundError
 from src.agent.executor import ToolExecutor
 import pytest
 import json
@@ -114,6 +114,15 @@ class ErrorExecutor:
         raise Exception('ToolNotFoundError')
 
 
+class ToolExecutionFailingRegistry:
+
+    def get(self, name):
+        def failing_tool():
+            raise RuntimeError('tool execution failed')
+
+        return failing_tool
+
+
 class Fakefunction:
     def __init__(self,name,arguments= '{}'):
 
@@ -134,6 +143,22 @@ class Fakefunction:
 #     agent = BeautyAgent(tools=[],llm= llm,executor=executor)
 #     with pytest.raises(ToolNotFoundError):
 #         agent.run('查询天气')
+
+
+def test_tool_execution_error_is_propagated():
+
+    agent = BeautyAgent(
+        tools=[],
+        llm=ErrorToolLLM(),
+        executor=ToolExecutor(ToolExecutionFailingRegistry()),
+        memory_store=MemoryStore(),
+    )
+
+    with pytest.raises(ToolExecutionError):
+        agent.run(
+            session_id='tool-error-session',
+            user_input='执行工具',
+        )
 
 
 class NoToolLLM:

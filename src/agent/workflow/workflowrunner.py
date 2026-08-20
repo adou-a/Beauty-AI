@@ -1,6 +1,7 @@
 from src.agent.workflow.workflowstatus import WorkflowState,WorkflowStatus
 from src.agent.planning.planner import Planner
 from src.agent.planning.plan_executor import PlanExecutor
+from src.agent.planning.models import StepStatus
 from src.agent.workflow.final_answer import FinalAnswer
 from src.agent.workflow.models import WorkflowResult
 from src.agent.validation.validator import Validator
@@ -19,6 +20,7 @@ class WorkflowRunner:
         workflow_state.start()
         try:
             executed_plan = self.plan_executor.execute(plan,executor_context,workflow_state)
+            self._check_steps_completed(executed_plan)
 
             results = []
             for step in executed_plan.steps:
@@ -38,6 +40,10 @@ class WorkflowRunner:
 
         workflow_state.finish()
         return WorkflowResult(user_input = user_input,goal = plan.goal,final_answer = answer,step_results = results,validation=validation_result)
+
+    def _check_steps_completed(self, plan) -> None:
+        if not all(step.status == StepStatus.COMPLETED for step in plan.steps):
+            raise RuntimeError("workflow cannot complete: not all plan steps are completed")
        
         
         
