@@ -2,6 +2,7 @@ import pytest
 
 from src.agent.planning.models import Plan, PlanStep, StepStatus
 from src.agent.planning.plan_executor import PlanExecutor
+from src.agent.recovery.models import RecoveryContext
 from src.agent.validation.models import ValidationResult
 from src.agent.workflow.models import WorkflowResult
 from src.agent.workflow.workflowrunner import WorkflowRunner
@@ -39,6 +40,22 @@ class FakeValidator:
         return ValidationResult(success=True, reasons=[])
 
 
+class FakeRecoveryResult:
+    success = True
+    final_answer = "recovered-final-answer"
+
+
+class FakeRecoveryManager:
+    def __init__(self):
+        self.received_context = None
+        self.call_count = 0
+
+    def recover(self, context):
+        self.received_context = context
+        self.call_count += 1
+        return FakeRecoveryResult()
+
+
 def test_workflow_input_becomes_plan_then_executes_and_returns():
     plan = Plan(
         goal="制定护肤方案",
@@ -46,11 +63,13 @@ def test_workflow_input_becomes_plan_then_executes_and_returns():
     )
     planner = FakePlanner(plan)
     executor = FakePlanExecutor()
+    recovery_manager = FakeRecoveryManager()
     runner = WorkflowRunner(
         planner=planner,
         planexecutor=executor,
         final_answer=FakeFinalAnswer(),
         validator=FakeValidator(),
+        recovery_manager=recovery_manager,
     )
 
     result = runner.run("我的皮肤容易泛红", "session-001")
@@ -61,6 +80,43 @@ def test_workflow_input_becomes_plan_then_executes_and_returns():
     assert result.step_results == ["执行结果"]
     assert result.final_answer == "final-answer"
     assert plan.steps[0].result == "执行结果"
+    assert recovery_manager.call_count == 0
+
+
+def test_validation_failure_passes_recovery_context_to_recovery_manager():
+    validation_result = ValidationResult(
+        success=False,
+        reasons=["missing risk analysis"],
+    )
+
+    class FailedValidator:
+        def validate(self, user_input, goal, final_answer):
+            return validation_result
+
+    plan = Plan(
+        goal="制定护肤方案",
+        steps=[PlanStep(id=1, description="分析用户需求")],
+    )
+    recovery_manager = FakeRecoveryManager()
+    runner = WorkflowRunner(
+        planner=FakePlanner(plan),
+        planexecutor=FakePlanExecutor(),
+        final_answer=FakeFinalAnswer(),
+        validator=FailedValidator(),
+        recovery_manager=recovery_manager,
+    )
+
+    runner.run("我的皮肤容易泛红", "session-recovery")
+
+    assert recovery_manager.call_count == 1
+    context = recovery_manager.received_context
+    assert isinstance(context, RecoveryContext)
+    assert context.user_input == "我的皮肤容易泛红"
+    assert context.goal == plan.goal
+    assert context.old_plan is plan
+    assert context.step_results == ["执行结果"]
+    assert context.final_answer == "final-answer"
+    assert context.validation_result is validation_result
 
 
 def test_planner_failure_is_not_reported_as_success():
@@ -73,6 +129,7 @@ def test_planner_failure_is_not_reported_as_success():
         planexecutor=FakePlanExecutor(),
         final_answer=FakeFinalAnswer(),
         validator=FakeValidator(),
+        recovery_manager=FakeRecoveryManager(),
     )
 
     with pytest.raises(RuntimeError, match="planner failed"):
@@ -94,6 +151,7 @@ def test_executor_failure_propagates_to_caller():
         planexecutor=FailingExecutor(),
         final_answer=FakeFinalAnswer(),
         validator=FakeValidator(),
+        recovery_manager=FakeRecoveryManager(),
     )
 
     with pytest.raises(RuntimeError, match="executor failed"):
@@ -118,6 +176,7 @@ def test_workflow_is_running_when_executor_starts():
         planexecutor=executor,
         final_answer=FakeFinalAnswer(),
         validator=FakeValidator(),
+        recovery_manager=FakeRecoveryManager(),
     )
 
     runner.run("用户输入", "session-001")
@@ -142,6 +201,7 @@ def test_workflow_is_failed_after_executor_failure():
         planexecutor=executor,
         final_answer=FakeFinalAnswer(),
         validator=FakeValidator(),
+        recovery_manager=FakeRecoveryManager(),
     )
 
     with pytest.raises(RuntimeError, match="executor failed"):
@@ -189,6 +249,7 @@ def test_workflow_fails_when_any_step_is_not_completed():
         planexecutor=executor,
         final_answer=final_answer,
         validator=validator,
+        recovery_manager=FakeRecoveryManager(),
     )
 
     with pytest.raises(RuntimeError, match="not all plan steps are completed"):
@@ -234,6 +295,7 @@ def test_current_step_id_changes_during_plan_execution():
         planexecutor=executor,
         final_answer=FakeFinalAnswer(),
         validator=FakeValidator(),
+        recovery_manager=FakeRecoveryManager(),
     )
 
     runner.run("用户输入", "session-001")

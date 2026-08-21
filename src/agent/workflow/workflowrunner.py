@@ -5,13 +5,16 @@ from src.agent.planning.models import StepStatus
 from src.agent.workflow.final_answer import FinalAnswer
 from src.agent.workflow.models import WorkflowResult
 from src.agent.validation.validator import Validator
+from src.agent.recovery.models import RecoveryContext,RecoveryResult
+from src.agent.recovery.recovery_manager import RecoveryManager
 class WorkflowRunner:
 
-    def __init__(self,planner:Planner,planexecutor:PlanExecutor,final_answer:FinalAnswer,validator:Validator):
+    def __init__(self,planner:Planner,planexecutor:PlanExecutor,final_answer:FinalAnswer,validator:Validator,recovery_manager:RecoveryManager):
         self.planner = planner
         self.plan_executor = planexecutor
         self.final_answer = final_answer
         self.validator = validator
+        self.recovery_manager = recovery_manager
     def run(self,user_input,session_id) -> WorkflowResult:
         
         plan = self.planner.create_plan(user_input)
@@ -32,7 +35,26 @@ class WorkflowRunner:
                 results=results,)
 
             validation_result = self.validator.validate(user_input = user_input,goal = plan.goal,final_answer = answer)
-           
+            if not validation_result.success:
+                recovery_context = RecoveryContext(
+                user_input = user_input,
+                goal = plan.goal,
+                old_plan = plan,
+                step_results = results,
+                final_answer = answer,
+                validation_result = validation_result
+            )
+
+                recovery_result = self.recovery_manager.recover(recovery_context)
+                if recovery_result == True:
+                    answer = recovery_result.final_answer
+
+                return answer
+
+              
+    
+
+
         except Exception as exc:
             workflow_state.status = WorkflowStatus.FAILED
             workflow_state.error = str(exc)
