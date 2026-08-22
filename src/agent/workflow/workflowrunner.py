@@ -48,6 +48,8 @@ class WorkflowRunner:
                 recovery_result = self.recovery_manager.recover(recovery_context)
                 if recovery_result == True:
                     answer = recovery_result.final_answer
+                    validation_result = self.validator.validate(user_input=user_input,goal=plan.goal,final_answer=answer)
+                    
 
                 return answer
 

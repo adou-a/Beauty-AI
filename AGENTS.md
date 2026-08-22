@@ -90,12 +90,12 @@ Do not:
 
 Before finishing changes:
 
-Run:
+Run only the tests relevant to the current changes:
 
-pytest
+pytest tests/<relevant_test_file>.py
 
 Ensure:
-- existing tests pass
+- relevant existing tests pass
 - new behavior has coverage
 
 ## Environment
@@ -119,6 +119,6 @@ Install dependencies:
 pip install -r requirements.txt
 
 
-Run tests:
+Run relevant tests:
 
-pytest
+pytest tests/<relevant_test_file>.py
