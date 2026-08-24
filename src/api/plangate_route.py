@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from src.api.schemas import PlangateRequest, PlangateResponse
+from src.api.schemas import PlangateRequest, PlangateResponse,AgentResponse
 from src.agent.planning.gate import PlanningGate
 from src.api.dependencies import get_gate
 
@@ -11,23 +11,23 @@ router = APIRouter()
 logger = get_logger(__name__)
 
 
-@router.post("/", response_model=PlangateResponse)
+@router.post("/", response_model = AgentResponse)
 def gate(
     request: PlangateRequest,
     plangate: PlanningGate = Depends(get_gate),
-) -> PlangateResponse:
+) -> AgentResponse:
     try:
         logger.info(
             "Planning gate API request received session=%s",
             request.session_id,
         )
         result = plangate.choice(
-            session_id=request.session_id,
-            user_input=request.message,
+            session_id = request.session_id,
+            user_input = request.message,
         )
 
 
-        return PlangateResponse(answer=result)
+        return AgentResponse(answer = result)
     except Exception as exc:
         logger.exception("Planning gate execution failed")
         raise HTTPException(

@@ -15,7 +15,4 @@ def home():
 
 
 
-app.include_router(ingredient_router,prefix='/ingredients')
-app.include_router(analyze_router,prefix='/analyze')
-app.include_router(agent_router,prefix='/agent/chat')
-app.include_router(gate_router,prefix='/plangate/choice')
+app.include_router(gate_router,prefix='/agent/chat')
