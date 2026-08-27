@@ -1,5 +1,11 @@
 from src.rag.retriever import Retriever
-from src.rag.rag_service import build_context
+
+
+RAG_KNOWLEDGE_GUIDANCE = (
+    '优先依据检索到的知识事实回答。'
+    '如果当前知识事实不足以支持结论，应明确说明资料不足。'
+    '不要根据缺失信息编造事实。'
+)
 
 
 class RAGTool:
@@ -9,22 +15,19 @@ class RAGTool:
 
     def search_knowledge(self,query: str) -> dict:
 
-        results = self.retriever.retriever(query)
+        facts = self.retriever.retriever(query)
 
-        context = build_context(results)
-
-        sources = []
-
-        for result in results:
-            sources.append(
-                {
-                    'source': result.chunk.source,
-                    'index': result.chunk.index
-                }
-            )
-
-        return{
+        return {
             'query': query,
-            'context': context,
-            'sources': sources
+            'facts': [
+                {
+                    'id': fact.id,
+                    'ingredient': fact.ingredient,
+                    'category': fact.category,
+                    'content': fact.content,
+                    'source': fact.source
+                }
+                for fact in facts
+            ],
+            'guidance': RAG_KNOWLEDGE_GUIDANCE
         }

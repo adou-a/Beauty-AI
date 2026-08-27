@@ -22,7 +22,21 @@ class EmbeddedChunk:
     index: int
     vector: list[float]
 
+
+@dataclass
+class KnowledgeFact:
+    id: str
+    ingredient: str
+    category: str
+    content: str
+    source: list[str]
+
+@dataclass
+class EmbeddedKnowledgeFact:
+    fact: KnowledgeFact
+    vector: list[float]
+
 @dataclass
 class SearchResult:
-    chunk: EmbeddedChunk
+    fact: KnowledgeFact
     score: float

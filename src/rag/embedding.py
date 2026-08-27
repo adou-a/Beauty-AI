@@ -1,5 +1,5 @@
 from sentence_transformers import SentenceTransformer
-from src.rag.models import Chunk,EmbeddedChunk
+from src.rag.models import KnowledgeFact,EmbeddedKnowledgeFact
 
 
 
@@ -15,8 +15,11 @@ class EmbeddingService:
 
         return vector.tolist()
 
-    def embed_chunk(self,chunk:Chunk) -> EmbeddedChunk:
+    def embed_fact(self,fact: KnowledgeFact) -> EmbeddedKnowledgeFact:
 
-        vector = self.embed_text(chunk.content)
+        vector = self.embed_text(fact.content)
 
-        return EmbeddedChunk(content = chunk.content,source = chunk.source,index = chunk.index,vector = vector)
+        return EmbeddedKnowledgeFact(fact = fact,vector = vector)
+    
+
+       
