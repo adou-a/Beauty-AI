@@ -25,7 +25,14 @@ class RAGTool:
                     'ingredient': fact.ingredient,
                     'category': fact.category,
                     'content': fact.content,
-                    'source': fact.source
+                    'source': [
+                        {
+                            'name': source.name,
+                            'type': source.type,
+                            'url': source.url
+                        }
+                        for source in fact.source
+                    ]
                 }
                 for fact in facts
             ],

@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from src.rag.models import EmbeddedKnowledgeFact, KnowledgeFact, SearchResult
+from src.rag.models import EmbeddedKnowledgeFact, KnowledgeFact, SearchResult, Source
 from src.rag.similarity import cosine_similarity
 
 
@@ -46,7 +46,14 @@ class VectorStore:
                         'ingredient': fact.ingredient,
                         'category': fact.category,
                         'content': fact.content,
-                        'source': fact.source
+                        'source': [
+                            {
+                                'name': source.name,
+                                'type': source.type,
+                                'url': source.url
+                            }
+                            for source in fact.source
+                        ]
                     },
                     'vector': embedded_fact.vector
                 }
@@ -66,12 +73,20 @@ class VectorStore:
         self.items = []
         for item in raw_data:
             fact_data = item['fact']
+            sources = [
+                Source(
+                    name=source_data['name'],
+                    type=source_data.get('type'),
+                    url=source_data.get('url')
+                )
+                for source_data in fact_data['source']
+            ]
             fact = KnowledgeFact(
                 id=fact_data['id'],
                 ingredient=fact_data['ingredient'],
                 category=fact_data['category'],
                 content=fact_data['content'],
-                source=fact_data['source']
+                source=sources
             )
             self.items.append(
                 EmbeddedKnowledgeFact(

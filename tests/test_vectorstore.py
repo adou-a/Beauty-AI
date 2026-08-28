@@ -1,4 +1,7 @@
-from src.rag.models import EmbeddedKnowledgeFact, KnowledgeFact
+import json
+from pathlib import Path
+
+from src.rag.models import EmbeddedKnowledgeFact, KnowledgeFact, Source
 from src.rag.vector_store import VectorStore
 from src.rag.retriever import Retriever
 from src.agent.rag_tool import RAGTool
@@ -15,7 +18,7 @@ def test_vector_store_returns_most_similar_fact():
                     ingredient="敏感肌",
                     category="skin_suitability",
                     content="敏感肌知识",
-                    source=["sensitive.md"]
+                    source=[Source(name="sensitive.md")]
                 ),
                 vector=[1.0, 0.0]
             ),
@@ -25,7 +28,7 @@ def test_vector_store_returns_most_similar_fact():
                     ingredient="防晒剂",
                     category="effect",
                     content="防晒知识",
-                    source=["sunscreen.md"]
+                    source=[Source(name="sunscreen.md")]
                 ),
                 vector=[0.0, 1.0]
             )
@@ -40,7 +43,7 @@ def test_vector_store_returns_most_similar_fact():
     assert len(results) == 1
 
     assert results[0].fact.id == "sensitive-001"
-    assert results[0].fact.source == ["sensitive.md"]
+    assert results[0].fact.source == [Source(name="sensitive.md")]
     assert isinstance(results[0].score, (int, float))
 
 class FakeEmbeddingService:
@@ -69,7 +72,7 @@ def test_retriever_returns_relevant_knowledge():
                     ingredient="敏感肌",
                     category="risk",
                     content="敏感肌容易出现刺激反应",
-                    source=["sensitive.md"]
+                    source=[Source(name="sensitive.md")]
                 ),
                 vector=[1.0, 0.0]
             ),
@@ -79,7 +82,7 @@ def test_retriever_returns_relevant_knowledge():
                     ingredient="防晒剂",
                     category="effect",
                     content="防晒有助于减少紫外线损伤",
-                    source=["sunscreen.md"]
+                    source=[Source(name="sunscreen.md")]
                 ),
                 vector=[0.0, 1.0]
             )
@@ -98,7 +101,7 @@ def test_retriever_returns_relevant_knowledge():
 
     assert isinstance(results[0], KnowledgeFact)
     assert results[0].id == "sensitive-risk-001"
-    assert results[0].source == ["sensitive.md"]
+    assert results[0].source == [Source(name="sensitive.md")]
     assert results[0].category == "risk"
 
 class FakeRetriever:
@@ -115,7 +118,14 @@ class FakeRetriever:
                     "视黄醇初次使用时"
                     "可能出现干燥和蜕皮"
                 ),
-                source=["retinol.md"]
+                source=[
+                    Source(
+                        name="AAD article",
+                        type="AAD",
+                        url="https://example.com"
+                    ),
+                    Source(name="Source without metadata")
+                ]
             )
         ]
 
@@ -146,7 +156,19 @@ def test_rag_tool_returns_structured_facts():
     assert fact['ingredient'] == '视黄醇'
     assert fact['category'] == 'risk'
     assert '视黄醇' in fact['content']
-    assert fact['source'] == ['retinol.md']
+    assert isinstance(fact['source'], list)
+    assert fact['source'] == [
+        {
+            'name': 'AAD article',
+            'type': 'AAD',
+            'url': 'https://example.com'
+        },
+        {
+            'name': 'Source without metadata',
+            'type': None,
+            'url': None
+        }
+    ]
 
     assert isinstance(result['guidance'], str)
     assert result['guidance'].strip()
@@ -155,3 +177,49 @@ def test_rag_tool_returns_structured_facts():
 
     assert 'context' not in result
     assert 'sources' not in result
+    assert 'score' not in fact
+    assert 'vector' not in fact
+
+    json.dumps(result, ensure_ascii=False)
+
+
+def test_vector_store_source_round_trip(tmp_path: Path):
+    storage_path = tmp_path / 'vector_store.json'
+    fact = KnowledgeFact(
+        id='retinol-risk-001',
+        ingredient='retinol',
+        category='risk',
+        content='Retinol may cause dryness.',
+        source=[
+            Source(
+                name='Source A',
+                type='official',
+                url='https://example.com'
+            ),
+            Source(name='Source B')
+        ]
+    )
+    store = VectorStore(storage_path=str(storage_path))
+    store.add(EmbeddedKnowledgeFact(fact=fact, vector=[1.0, 0.0]))
+
+    store.save()
+
+    raw_data = json.loads(storage_path.read_text(encoding='utf-8'))
+    assert raw_data[0]['fact']['source'] == [
+        {
+            'name': 'Source A',
+            'type': 'official',
+            'url': 'https://example.com'
+        },
+        {
+            'name': 'Source B',
+            'type': None,
+            'url': None
+        }
+    ]
+
+    loaded_items = VectorStore(storage_path=str(storage_path)).load()
+    loaded_sources = loaded_items[0].fact.source
+
+    assert all(isinstance(source, Source) for source in loaded_sources)
+    assert loaded_sources == fact.source

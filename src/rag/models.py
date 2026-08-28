@@ -24,12 +24,19 @@ class EmbeddedChunk:
 
 
 @dataclass
+class Source:
+    name: str
+    type: str | None = None
+    url: str | None = None
+
+
+@dataclass
 class KnowledgeFact:
     id: str
     ingredient: str
     category: str
     content: str
-    source: list[str]
+    source: list[Source]
 
 @dataclass
 class EmbeddedKnowledgeFact:
