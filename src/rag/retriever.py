@@ -26,6 +26,13 @@ class Retriever:
             query_vector = self.embedding_service.embed_text(query)
 
             search_results = self.vector_store.search(query_vector = query_vector,top_k = self.top_k)
+            for result in search_results:
+                logger.info(
+                    "Retrieval score: id=%s category=%s similarity=%.4f",
+                    result.fact.id,
+                    result.fact.category,
+                    result.score
+                )
             facts = [result.fact for result in search_results]
             logger.info('Retrieved %s knowledge facts',len(facts))
 
