@@ -62,3 +62,4 @@ At 1% one panelist had a moderate responseat 2.5% two had a slight response10% N
 人体刺痛试验显示，在所测试条件下，
 1%–10%烟酰胺水溶液总体未表现出显著刺痛潜力，
 但少数受试者仍出现轻微或个别中度感官反应。
+### 

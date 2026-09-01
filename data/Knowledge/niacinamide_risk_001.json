@@ -1,0 +1,13 @@
+{
+    "id": "niacinamide_risk_001",
+    "ingredient": "烟酰胺（NIACINAMIDE）",
+    "category": "risk",
+    "content": "多项人体皮肤试验显示，在所测试的外用条件下，含烟酰胺的配方总体具有较低的皮肤刺激潜力并具有良好的皮肤耐受性。",
+    "source": [
+        {
+            "name": "Final Report of the Safety Assessment of Niacinamide and Niacin",
+            "type": "safety_assessment",
+            "url": "https://cir-reports.cir-safety.org/view-attachment/?id=39cd1a17-8e74-ec11-8943-0022482f06a6"
+        }
+    ]
+}

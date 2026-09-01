@@ -1,0 +1,13 @@
+{
+    "id": "niacinamide_risk_002",
+    "ingredient": "烟酰胺（NIACINAMIDE）",
+    "category": "risk",
+    "content": "人体刺痛试验显示，在所测试条件下，1%至10%烟酰胺水溶液总体未表现出显著的皮肤刺痛潜力，但少数受试者仍出现轻微或个别中度刺痛反应。",
+    "source": [
+        {
+            "name": "Final Report of the Safety Assessment of Niacinamide and Niacin",
+            "type": "safety_assessment",
+            "url": "https://cir-reports.cir-safety.org/view-attachment/?id=39cd1a17-8e74-ec11-8943-0022482f06a6"
+        }
+    ]
+}
