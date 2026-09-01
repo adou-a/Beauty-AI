@@ -1,9 +1,24 @@
 from src.agent.agent import BeautyAgent
+from src.agent.memory import ConversationMemory
+from src.api import dependencies
 from src.exceptions.agent_exception import ToolExecutionError, ToolNotFoundError
 from src.agent.executor import ToolExecutor
+from src.rag.models import KnowledgeFact, Source
 import pytest
 import json
 from src.agent.session_memory import MemoryStore
+
+
+def test_answer_focus_contract_is_strict():
+    system_prompt = ConversationMemory().get_messages()[0]["content"]
+
+    assert "Retrieved KnowledgeFacts 是证据池，不是回答清单" in system_prompt
+    assert "某个 fact 被检索出来，不代表必须写入答案" in system_prompt
+    assert "“是什么”只回答 definition" in system_prompt
+    assert "“有什么作用”只回答 function" in system_prompt
+    assert "“有什么风险”只回答 risk" in system_prompt
+    assert "“怎么使用”只回答 usage" in system_prompt
+    assert "简单单一意图问题禁止写成成分百科" in system_prompt
 
 class FakeToolCall:
 
@@ -20,39 +35,6 @@ class FakeResponse:
 
         self.tool_calls = tool_calls
         self.content = content
-
-class FakeLLM:
-    def __init__(self):
-        self.called = False
-
-    def chat(self,messages,tools):
-        if not self.called:
-            self.called = True
-            return FakeResponse(tool_calls= [FakeToolCall('search_ingredient')])
-
-        else:
-            return FakeResponse(content= '分析完成')
-
-
-class MultiToolLLM:
-    def __init__(self):
-        self.step = 0
-
-
-
-    def chat(self,messages,tools):
-
-        self.step += 1
-
-        if self.step == 1:
-            return FakeResponse(tool_calls=[FakeToolCall('search_ingredient')])
-
-        elif self.step == 2:
-            return FakeResponse(tool_calls=[FakeToolCall('check_skin_risk')])
-
-        else:
-            return FakeResponse(content= '完成分析')
-        
 
 class FakeExecutor:
 
@@ -75,19 +57,6 @@ class FakeExecutor:
             return{
                 'knowledge':
                 '皮肤屏障受损以后,皮肤对外界刺激的防御能力下降'
-            }
-
-        elif name == 'search_ingredient':
-            return{
-                'name': '烟酰胺',
-                'effect': '护肤成分'
-            }
-
-        elif name == 'check_skin_risk':
-
-            return{
-                'skin_type': '敏感肌',
-                'risk': '需要注意刺激'
             }
         return {}
 
@@ -276,192 +245,87 @@ def test_rag_tool():
     assert '皮肤屏障受损' in result
 
 
-class BusinessToolLLM:
-
-    def __init__(self):
-
-        self.step = 0
+class ContractEmbeddingService:
+    pass
 
 
-    def chat(self, messages, tools):
+class ContractVectorStore:
+    def load(self):
+        return []
 
-        self.step += 1
 
+class ContractRetriever:
+    def __init__(self, embedding_service, vector_store, top_k):
+        self.top_k = top_k
 
-        if self.step == 1:
-
-            return FakeResponse(
-                tool_calls=[
-                    FakeToolCall(
-                        name="search_ingredient",
-                        arguments='{"name": "烟酰胺"}'
+    def retriever(self, query):
+        return [
+            KnowledgeFact(
+                id="retinol_definition_001",
+                ingredient="视黄醇（Retinol）",
+                category="definition",
+                content="视黄醇是维生素A的一种形式。",
+                source=[
+                    Source(
+                        name="grounded-source",
+                        type="reference",
+                        url="https://example.com/retinol",
                     )
-                ]
+                ],
             )
+        ]
 
 
-        return FakeResponse(
-            content="烟酰胺基础信息查询完成"
+def test_production_agent_uses_only_search_knowledge(monkeypatch):
+    monkeypatch.setattr(
+        dependencies,
+        "EmbeddingService",
+        ContractEmbeddingService,
+    )
+    monkeypatch.setattr(
+        dependencies,
+        "VectorStore",
+        ContractVectorStore,
+    )
+    monkeypatch.setattr(
+        dependencies,
+        "Retriever",
+        ContractRetriever,
+    )
+    monkeypatch.setattr(
+        dependencies,
+        "get_llm_client",
+        lambda: object(),
+    )
+
+    agent = dependencies.get_agent()
+    tool_names = [tool["function"]["name"] for tool in agent.tools]
+    registry = agent.executor.registry
+
+    assert tool_names == ["search_knowledge"]
+    assert not registry.exists("search_ingredient")
+    assert not registry.exists("check_skin_risk")
+    assert registry.exists("search_knowledge")
+
+    result = agent.executor.execute(
+        FakeToolCall(
+            name="search_knowledge",
+            arguments='{"query": "视黄醇是什么"}',
         )
-
-def test_business_tool_still_works():
-
-    llm = BusinessToolLLM()
-
-    executor = FakeExecutor()
-
-    memory_store = MemoryStore()
-
-
-    agent = BeautyAgent(
-        tools=[],
-        llm=llm,
-        executor=executor,
-        memory_store=memory_store
     )
 
-
-    result = agent.run(
-        session_id="test_business",
-        user_input="查询烟酰胺的信息"
-    )
-
-
-    assert len(executor.calls) == 1
-
-
-    assert executor.calls[0]["name"] == \
-        "search_ingredient"
-
-
-    assert executor.calls[0]["arguments"] == {
-        "name": "烟酰胺"
-    }
-
-
-    assert all(
-        call["name"] != "search_knowledge"
-        for call in executor.calls
-    )
-
-
-    assert result == \
-        "烟酰胺基础信息查询完成"
-
-
-class MultiToolRAGLLM:
-
-    def __init__(self):
-
-        self.step = 0
-        self.messages_history = []
-
-
-    def chat(self, messages, tools):
-
-        self.step += 1
-
-        self.messages_history.append(
-            [m.copy() for m in messages]
-        )
-
-
-        if self.step == 1:
-
-            return FakeResponse(
-                tool_calls=[
-                    FakeToolCall(
-                        name="search_ingredient",
-                        arguments='{"name": "视黄醇"}',
-                        call_id="call_001"
-                    )
-                ]
-            )
-
-
-        elif self.step == 2:
-
-            return FakeResponse(
-                tool_calls=[
-                    FakeToolCall(
-                        name="check_skin_risk",
-                        arguments='{"skin_type": "敏感肌"}',
-                        call_id="call_002"
-                    )
-                ]
-            )
-
-
-        elif self.step == 3:
-
-            return FakeResponse(
-                tool_calls=[
-                    FakeToolCall(
-                        name="search_knowledge",
-                        arguments='{"query": "敏感肌使用视黄醇后脱皮刺痛的注意事项"}',
-                        call_id="call_003"
-                    )
-                ]
-            )
-
-
-        return FakeResponse(
-            content="敏感肌使用视黄醇后出现脱皮刺痛，需要降低使用频率并注意皮肤屏障状态。"
-        )
-
-
-def test_multi_tool_with_rag():
-
-    llm = MultiToolRAGLLM()
-
-    executor = FakeExecutor()
-
-    memory_store = MemoryStore()
-
-
-    agent = BeautyAgent(
-        tools=[],
-        llm=llm,
-        executor=executor,
-        memory_store=memory_store
-    )
-
-
-    result = agent.run(
-        session_id="test_multi_rag",
-        user_input=
-        "我是敏感肌，使用视黄醇以后脱皮刺痛，需要注意什么？"
-    )
-
-
-    assert [
-        call["name"]
-        for call in executor.calls
-    ] == [
-        "search_ingredient",
-        "check_skin_risk",
-        "search_knowledge"
+    assert result["query"] == "视黄醇是什么"
+    assert result["facts"][0]["id"] == "retinol_definition_001"
+    assert result["facts"][0]["source"] == [
+        {
+            "name": "grounded-source",
+            "type": "reference",
+            "url": "https://example.com/retinol",
+        }
     ]
 
+    monkeypatch.setattr(dependencies, "get_agent", lambda: agent)
+    gate = dependencies.get_gate()
 
-    assert executor.calls[0]["arguments"] == {
-        "name": "视黄醇"
-    }
-
-
-    assert executor.calls[1]["arguments"] == {
-        "skin_type": "敏感肌"
-    }
-
-
-    assert executor.calls[2]["arguments"] == {
-        "query":
-        "敏感肌使用视黄醇后脱皮刺痛的注意事项"
-    }
-
-
-    # 3次Tool + 最后1次Final Answer
-    assert llm.step == 4
-
-
-    assert "脱皮刺痛" in result
+    assert gate.agent is agent
+    assert gate.workflow_runner.plan_executor.step_executor.agent is agent

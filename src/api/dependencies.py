@@ -1,11 +1,8 @@
 from src.agent.schemas import (
-    ingredient_tool_schema,
-    search_ingredient_schema,
     search_knowledge_schema,
 )
 from src.services.ingredient_repository import IngredientRepository
 from src.services.ingredient_service import IngredientService
-from src.agent.tools import IngredientSearchTool
 from src.agent.rag_tool import RAGTool
 from src.agent.registry import ToolRegistry
 from src.agent.executor import ToolExecutor
@@ -40,9 +37,6 @@ def get_ai_service():
 
 
 def get_agent():
-    ingredient_service = get_ingredient_service()
-    ingredient_tool = IngredientSearchTool(ingredient_service)
-
     embedding_service = EmbeddingService()
     vector_store = VectorStore()
     vector_store.load()
@@ -54,14 +48,10 @@ def get_agent():
     rag_tool = RAGTool(retriever)
 
     registry = ToolRegistry()
-    registry.register("search_ingredient", ingredient_tool.search_ingredient)
-    registry.register("check_skin_risk", ingredient_tool.check_skin_risk)
     registry.register("search_knowledge", rag_tool.search_knowledge)
 
     return BeautyAgent(
         tools=[
-            ingredient_tool_schema,
-            search_ingredient_schema,
             search_knowledge_schema,
         ],
         llm=get_llm_client(),

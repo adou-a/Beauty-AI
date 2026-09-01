@@ -106,8 +106,11 @@ def test_retriever_returns_relevant_knowledge():
 
 class FakeRetriever:
 
-    def retriever(self,query):
+    def __init__(self):
+        self.queries = []
 
+    def retriever(self,query):
+        self.queries.append(query)
 
         return [
             KnowledgeFact(
@@ -126,6 +129,20 @@ class FakeRetriever:
                     ),
                     Source(name="Source without metadata")
                 ]
+            ),
+            KnowledgeFact(
+                id="retinol-function-001",
+                ingredient="视黄醇",
+                category="function",
+                content="视黄醇具有护肤作用",
+                source=[Source(name="Function source")]
+            ),
+            KnowledgeFact(
+                id="retinol-usage-001",
+                ingredient="视黄醇",
+                category="usage",
+                content="视黄醇应按产品说明使用",
+                source=[Source(name="Usage source")]
             )
         ]
 
@@ -141,8 +158,14 @@ def test_rag_tool_returns_structured_facts():
     result = rag_tool.search_knowledge(query)
 
     assert result['query'] == query
+    assert retriever.queries == [query]
     assert isinstance(result['facts'], list)
-    assert len(result['facts']) == 1
+    assert len(result['facts']) == 3
+    assert [fact['id'] for fact in result['facts']] == [
+        'retinol-risk-001',
+        'retinol-function-001',
+        'retinol-usage-001'
+    ]
 
     fact = result['facts'][0]
     assert set(fact) == {
@@ -172,8 +195,13 @@ def test_rag_tool_returns_structured_facts():
 
     assert isinstance(result['guidance'], str)
     assert result['guidance'].strip()
-    assert '资料不足' in result['guidance']
-    assert '编造' in result['guidance']
+    assert '专业事实必须依据当前检索到的 KnowledgeFacts' in result['guidance']
+    assert '不能改变原意、提高结论强度' in result['guidance']
+    assert 'KnowledgeFacts 没有提供的专业事实不要自行补充' in result['guidance']
+    assert '证据池，不是回答清单' in result['guidance']
+    assert '最终回答必须重新围绕用户当前问题本身' in result['guidance']
+    assert '其他 category 即使已经检索到，也必须省略' in result['guidance']
+    assert '回答完成当前问题后直接结束' in result['guidance']
 
     assert 'context' not in result
     assert 'sources' not in result

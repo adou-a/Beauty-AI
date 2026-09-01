@@ -3,6 +3,7 @@ _pycache_/
 .env
 venv/
 .venv/
-.vscode/
+.vscode/*
+!.vscode/settings.json
 .pytest_cache/
 *.egg-info/

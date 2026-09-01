@@ -27,6 +27,7 @@ class BeautyAgent:
         messages = memory.get_messages()
         while True:
             logger.info('Calling LLM')
+
             response = self.llm.chat(messages,self.tools)
 
             if response.tool_calls:
