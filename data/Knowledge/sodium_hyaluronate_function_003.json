@@ -1,0 +1,13 @@
+{
+    "id": "sodium_hyaluronate_function_003",
+    "ingredient": "透明质酸钠（Sodium Hyaluronate）",
+    "category": "function",
+    "content": "人体试验显示，含透明质酸钠的外用制剂可改善皮肤水合度。",
+    "source": [
+        {
+            "name": "Liposome, gel and lipogelosome formulations containing sodium hyaluronate",
+            "type": "clinical_study",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/24724824/"
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "id": "salicylic_acid_risk_001",
+    "ingredient": "水杨酸（Salicylic Acid）",
+    "category": "risk",
+    "content": "CIR汇总的人体研究显示，含2%水杨酸的不同配方刺激性存在差异，部分配方无明显刺激，而另一些配方可表现为轻度至中度刺激。",
+    "source": [
+        {
+            "name": "Amended Safety Assessment of Salicylic Acid and Salicylates as Used in Cosmetics",
+            "type": "safety_assessment",
+            "url": "https://cir-reports.cir-safety.org/view-attachment/?id=f8f3e083-2ca8-b5b4-b338-aa3ca6da8825"
+        }
+    ]
+}

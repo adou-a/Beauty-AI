@@ -59,7 +59,7 @@ Results: Participants (retinol, N=237; vehicle, N=234) had a mean (SD) age of 47
 Conclusions: This pooled analysis of 6 vehicle-controlled clinical studies provides new evidence for the efficacy of 0.1% stabilized bioactive retinol in improving signs of photoaging without causing major irritation. Topical 0.1% stabilized bioactive retinol was well tolerated with only a few reported cases of skin irritation. J Drugs Dermatol. 2024;23(4):&nbsp; &nbsp; &nbsp;doi:10.36849/JDD.8124.
 
 {
-    "id": "retionl_risk_001",
+    "id": "",
     "ingredient": "",
     "category": "",
     "content": "",
@@ -92,4 +92,8 @@ Retinoid or retinol
 "Many patients want to start right off with tretinoin, but I advise them to use the least-intense retinoid formula they can find, and use it every other night to start, slowly building up," she says. "If they don’t do that, they end up irritating their skin."
 Dr. Alster advises using it only at night and always using sun protection during the day, which includes seeking shade, wearing sun-protective clothing, such as a wide-brimmed hat, and applying sunscreen to all skin not covered by clothing. If you have sensitive skin, look for a physical sunscreen containing the ingredients titanium dioxide and/or zinc oxide.
 While people of all skin colors can benefit from retinoids, people with darker skin need to be especially vigilant about whether a product is causing irritation, says Sonia Badreshia-Bansal, MD, FAAD, a board-certified dermatologist in private practice in Danville, California. "With skin of color, irritation can trigger dark marks, known as hyperpigmentation," she cautions. "However, starting slowly and using moisturizer will help mitigate this possibility."
+
+
+### regulation
+在化妆品安全技术规范中未查询到
 

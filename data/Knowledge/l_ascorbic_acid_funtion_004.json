@@ -1,0 +1,18 @@
+{
+    "id": "l_ascorbic_acid_function_004",
+    "ingredient": "L-抗坏血酸（L-Ascorbic Acid）",
+    "category": "function",
+    "content": "系统综述显示，外用维生素C可改善部分光老化皮肤的表面形态，使皮肤更加平滑并减少皱纹表现。",
+    "source": [
+        {
+            "name": "Efficacy of topical vitamin C in melasma and photoaging: A systematic review",
+            "type": "systematic_review",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/37128827/"
+        },
+        {
+            "name": "Topical ascorbic acid on photoaged skin. Clinical, topographical and ultrastructural evaluation: double-blind study vs. placebo",
+            "type": "randomized_controlled_trial",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/12823436/"
+        }
+    ]
+}

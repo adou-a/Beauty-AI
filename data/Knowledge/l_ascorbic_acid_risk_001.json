@@ -1,0 +1,13 @@
+{
+    "id": "l_ascorbic_acid_risk_001",
+    "ingredient": "L-抗坏血酸（L-Ascorbic Acid）",
+    "category": "risk",
+    "content": "Cosmetic Ingredient Review专家组评估认为，L-抗坏血酸在该安全评估所涵盖的化妆品使用方式和浓度条件下是安全的。",
+    "source": [
+        {
+            "name": "Final Report of the Safety Assessment of L-Ascorbic Acid, Calcium Ascorbate, Magnesium Ascorbate, Magnesium Ascorbyl Phosphate, Sodium Ascorbate, and Sodium Ascorbyl Phosphate as Used in Cosmetics",
+            "type": "safety_assessment",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/16154915/"
+        }
+    ]
+}

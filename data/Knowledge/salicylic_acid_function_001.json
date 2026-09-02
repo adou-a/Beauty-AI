@@ -1,0 +1,18 @@
+{
+    "id": "salicylic_acid_function_001",
+    "ingredient": "水杨酸（Salicylic Acid）",
+    "category": "function",
+    "content": "水杨酸对人体皮肤具有角质溶解作用，可使皮肤角化上皮或角质层软化、分离并促进脱屑。",
+    "source": [
+        {
+            "name": "ChEBI — salicylic acid (CHEBI:16914)",
+            "type": "chemical_database",
+            "url": "https://www.ebi.ac.uk/chebi/CHEBI:16914"
+        },
+        {
+            "name": "Amended Safety Assessment of Salicylic Acid and Salicylates as Used in Cosmetics",
+            "type": "safety_assessment",
+            "url": "https://cir-reports.cir-safety.org/view-attachment/?id=f8f3e083-2ca8-b5b4-b338-aa3ca6da8825"
+        }
+    ]
+}

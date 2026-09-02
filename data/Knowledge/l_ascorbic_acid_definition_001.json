@@ -1,0 +1,19 @@
+
+{
+    "id": "l_ascorbic_acid_definition_001",
+    "ingredient": "抗坏血酸（维生素C）/ L-Ascorbic Acid",
+    "category": "definition",
+    "content": "抗坏血酸（维生素C）的INCI名称为ASCORBIC ACID，收录于中国《已使用化妆品原料目录》；L-抗坏血酸（L-Ascorbic Acid）是抗坏血酸的L型对映体，属于维生素C。",
+    "source": [
+        {
+            "name": "已使用化妆品原料目录：抗坏血酸（维生素C）",
+            "type": "regulatory_database",
+            "url": "https://hzpsys.nifdc.org.cn/hzpGS/ysyhzpylmlaById?ylId=68B69CB3B8D0454E88ED0500589E073D"
+        },
+        {
+            "name": "PubChem - L-Ascorbic Acid",
+            "type": "authoritative_database",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/compound/54670067"
+        }
+    ]
+}

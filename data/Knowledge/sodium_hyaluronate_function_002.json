@@ -1,0 +1,18 @@
+{
+    "id": "sodium_hyaluronate_function_002",
+    "ingredient": "透明质酸钠（Sodium Hyaluronate）",
+    "category": "function",
+    "content": "透明质酸钠在化妆品中可作为皮肤调理剂使用。",
+    "source": [
+        {
+            "name": "Final Report of the Safety Assessment of Hyaluronic Acid, Potassium Hyaluronate, and Sodium Hyaluronate",
+            "type": "safety_assessment",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/19636067/"
+        },
+        {
+            "name": "Final Report of the Safety Assessment of Hyaluronic Acid, Potassium Hyaluronate, and Sodium Hyaluronate",
+            "type": "safety_assessment",
+            "url": "https://cir-reports.cir-safety.org/view-attachment/?id=8a154447-8e74-ec11-8943-0022482f06a6"
+        }
+    ]
+}

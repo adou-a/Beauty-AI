@@ -1,0 +1,18 @@
+{
+    "id": "salicylic_acid_definition_001",
+    "ingredient": "水杨酸（Salicylic Acid）",
+    "category": "definition",
+    "content": "水杨酸（Salicylic Acid）是已使用化妆品原料，INCI名称为 SALICYLIC ACID；其化学上属于单羟基苯甲酸，结构可视为苯甲酸的邻位连接一个羟基。",
+    "source": [
+        {
+            "name": "已使用化妆品原料1",
+            "type": "regulatory_database",
+            "url": "https://hzpsys.nifdc.org.cn/hzpGS/ysyhzpylmlaById?ylId=788D8E80430D467FB9F00E89CEEEBBF3"
+        },
+        {
+            "name": "ChEBI — salicylic acid (CHEBI:16914)",
+            "type": "chemical_database",
+            "url": "https://www.ebi.ac.uk/chebi/CHEBI:16914"
+        }
+    ]
+}

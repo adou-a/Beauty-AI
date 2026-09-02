@@ -1,0 +1,18 @@
+{
+    "id": "sodium_hyaluronate_definition_001",
+    "ingredient": "透明质酸钠（Sodium Hyaluronate）",
+    "category": "definition",
+    "content": "透明质酸钠的中文名称为透明质酸钠，INCI名称为SODIUM HYALURONATE；其结构由N-乙酰-D-葡萄糖胺和葡萄糖醛酸组成的重复二糖链构成。",
+    "source": [
+        {
+            "name": "已使用化妆品原料目录",
+            "type": "regulatory_database",
+            "url": "https://hzpsys.nifdc.org.cn/hzpGS/ysyhzpylmla#"
+        },
+        {
+            "name": "Final Report of the Safety Assessment of Hyaluronic Acid, Potassium Hyaluronate, and Sodium Hyaluronate",
+            "type": "safety_assessment",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/19636067/"
+        }
+    ]
+}

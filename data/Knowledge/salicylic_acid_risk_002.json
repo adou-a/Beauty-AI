@@ -1,0 +1,13 @@
+{
+    "id": "salicylic_acid_risk_002",
+    "ingredient": "水杨酸（Salicylic Acid）",
+    "category": "risk",
+    "content": "一项194人的居家使用试验中，使用含2%水杨酸、pH 2.28的乳液和保湿产品后，受试者报告了瘙痒、刺痛、轻度红斑和灼热感。",
+    "source": [
+        {
+            "name": "Amended Safety Assessment of Salicylic Acid and Salicylates as Used in Cosmetics",
+            "type": "safety_assessment",
+            "url": "https://cir-reports.cir-safety.org/view-attachment/?id=f8f3e083-2ca8-b5b4-b338-aa3ca6da8825"
+        }
+    ]
+}

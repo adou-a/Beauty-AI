@@ -1,0 +1,13 @@
+{
+    "id": "salicylic_acid_regulatory_001",
+    "ingredient": "水杨酸（Salicylic Acid）",
+    "category": "regulatory",
+    "content": "按照《化妆品安全技术规范》，水杨酸用于驻留类产品和淋洗类肤用产品时最大允许浓度为2.0%，用于淋洗类发用产品时最大允许浓度为3.0%；除香波外，不得用于三岁以下儿童使用的产品中，相关产品标签应标注“含水杨酸；三岁以下儿童勿用”。",
+    "source": [
+        {
+            "name": "化妆品安全技术规范",
+            "type": "regulation",
+            "url": "https://amr.hainan.gov.cn/himpa/yprz/jchc/hzpbash/202112/P020211228621380645788.pdf"
+        }
+    ]
+}

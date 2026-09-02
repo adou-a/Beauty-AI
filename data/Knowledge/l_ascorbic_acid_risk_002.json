@@ -1,0 +1,13 @@
+{
+    "id": "l_ascorbic_acid_risk_002",
+    "ingredient": "L-抗坏血酸（L-Ascorbic Acid）",
+    "category": "risk",
+    "content": "CIR收录的一项人体研究显示，一款含10%抗坏血酸的产品在为期4天的累积斑贴试验中未表现出皮肤刺激性。",
+    "source": [
+        {
+            "name": "Final Report of the Safety Assessment of L-Ascorbic Acid, Calcium Ascorbate, Magnesium Ascorbate, Magnesium Ascorbyl Phosphate, Sodium Ascorbate, and Sodium Ascorbyl Phosphate as Used in Cosmetics",
+            "type": "safety_assessment",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/16154915/"
+        }
+    ]
+}
