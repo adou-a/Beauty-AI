@@ -1,8 +1,8 @@
 {
-    "id": "l_ascorbic_acid_risk_001",
-    "ingredient": "L-抗坏血酸（L-Ascorbic Acid）",
+    "id": "ascorbic_acid_risk_003",
+    "ingredient": "抗坏血酸（Ascorbic Acid）",
     "category": "risk",
-    "content": "Cosmetic Ingredient Review专家组评估认为，L-抗坏血酸在该安全评估所涵盖的化妆品使用方式和浓度条件下是安全的。",
+    "content": "CIR收录的人体研究中，含5%抗坏血酸的乳膏在103名受试者中未表现出皮肤致敏性，另一项含10%抗坏血酸的面部产品在26名受试者中也未表现出接触致敏性。",
     "source": [
         {
             "name": "Final Report of the Safety Assessment of L-Ascorbic Acid, Calcium Ascorbate, Magnesium Ascorbate, Magnesium Ascorbyl Phosphate, Sodium Ascorbate, and Sodium Ascorbyl Phosphate as Used in Cosmetics",

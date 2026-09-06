@@ -230,7 +230,7 @@ def main():
     # 1. Test Query
     # -----------------------------------------------------
 
-    query = "视黄醇是什么"
+    query = "烟酰胺和抗坏血酸有什么区别？"
 
     print_line()
 
@@ -256,7 +256,7 @@ def main():
     retriever = Retriever(
         embedding_service=embedding_service,
         vector_store=vector_store,
-        top_k=3,
+        top_k=4,
     )
 
 

@@ -43,7 +43,7 @@ def get_agent():
     retriever = Retriever(
         embedding_service=embedding_service,
         vector_store=vector_store,
-        top_k=3,
+        top_k=4,
     )
     rag_tool = RAGTool(retriever)
 

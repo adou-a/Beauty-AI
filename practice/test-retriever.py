@@ -4,9 +4,9 @@ from src.rag.vector_store import VectorStore
 embedding_service = EmbeddingService()
 vector_store = VectorStore()
 vector_store.load()
-retriever = Retriever(embedding_service = embedding_service,vector_store = vector_store,top_k =  3)
+retriever = Retriever(embedding_service = embedding_service,vector_store = vector_store,top_k =  4)
 
-results = retriever.retriever("视黄醇的作用")
+results = retriever.retriever("什么成分可以改善色素？")
 for result in results:
     print("ID:", result.id)
     print("Ingredient:", result.ingredient)

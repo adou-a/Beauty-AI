@@ -97,7 +97,12 @@ class VectorStore:
         return self.items
 
 
-    def search(self,query_vector: list[float], top_k: int = 3) -> list[SearchResult]:
+    def search(
+        self,
+        query_vector: list[float],
+        top_k: int = 4,
+        ingredients: set[str] | None = None,
+    ) -> list[SearchResult]:
         #结果取的数量应该大于0
         if top_k <= 0:
             raise ValueError('top_k must be greater than 0')
@@ -106,6 +111,12 @@ class VectorStore:
 
         #取items里面的嵌入知识事实
         for embedded_fact in self.items:
+            if (
+                ingredients is not None
+                and embedded_fact.fact.ingredient not in ingredients
+            ):
+                continue
+
             score = cosine_similarity(query_vector, embedded_fact.vector)
 
             result = SearchResult(fact=embedded_fact.fact, score=score)

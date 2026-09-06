@@ -9,6 +9,15 @@ import json
 from src.agent.session_memory import MemoryStore
 
 
+def tool_schema(name):
+    return {
+        'type': 'function',
+        'function': {
+            'name': name,
+        },
+    }
+
+
 def test_answer_focus_contract_is_strict():
     system_prompt = ConversationMemory().get_messages()[0]["content"]
 
@@ -117,7 +126,7 @@ class Fakefunction:
 def test_tool_execution_error_is_propagated():
 
     agent = BeautyAgent(
-        tools=[],
+        tools=[tool_schema('unknown_tool')],
         llm=ErrorToolLLM(),
         executor=ToolExecutor(ToolExecutionFailingRegistry()),
         memory_store=MemoryStore(),
@@ -209,7 +218,12 @@ def test_rag_tool():
     llm = RAGToolLLM()
     executor = FakeExecutor()
     memory_store = MemoryStore()
-    agent = BeautyAgent(tools=[],llm=llm,executor=executor,memory_store=memory_store)
+    agent = BeautyAgent(
+        tools=[tool_schema('search_knowledge')],
+        llm=llm,
+        executor=executor,
+        memory_store=memory_store,
+    )
 
 
     result = agent.run(session_id='test_rag',user_input='为什么皮肤屏障受损容易刺痛')
@@ -243,6 +257,74 @@ def test_rag_tool():
         tool_messages[0]['content']
 
     assert '皮肤屏障受损' in result
+
+
+class ScriptedLLM:
+    def __init__(self, responses):
+        self.responses = responses
+        self.messages_history = []
+
+    def chat(self, messages, tools):
+        self.messages_history.append([message.copy() for message in messages])
+        return self.responses[len(self.messages_history) - 1]
+
+
+def test_invalid_tool_call_is_retried_once_without_persisting_invalid_batch():
+    llm = ScriptedLLM([
+        FakeResponse(tool_calls=[
+            FakeToolCall('search_knowledge', call_id='valid_not_executed'),
+            FakeToolCall('search_knewledge', call_id='invalid'),
+        ]),
+        FakeResponse(tool_calls=[
+            FakeToolCall('search_knowledge', call_id='valid_retry'),
+        ]),
+        FakeResponse(content='完成'),
+    ])
+    executor = FakeExecutor()
+    memory_store = MemoryStore()
+    agent = BeautyAgent(
+        tools=[tool_schema('search_knowledge')],
+        llm=llm,
+        executor=executor,
+        memory_store=memory_store,
+    )
+
+    result = agent.run('invalid-tool-retry', '查询护肤知识')
+
+    assert result == '完成'
+    assert len(llm.messages_history) == 3
+    assert [call['name'] for call in executor.calls] == ['search_knowledge']
+    correction = llm.messages_history[1][-1]
+    assert correction['role'] == 'system'
+    assert 'search_knewledge' in correction['content']
+    assert 'search_knowledge' in correction['content']
+
+    stored_messages = memory_store.get_memory('invalid-tool-retry').get_messages()
+    assert all('search_knewledge' not in str(message) for message in stored_messages)
+    assert all(message != correction for message in stored_messages)
+
+
+def test_second_invalid_tool_call_raises_without_execution_or_memory_write():
+    llm = ScriptedLLM([
+        FakeResponse(tool_calls=[FakeToolCall('search_knewledge')]),
+        FakeResponse(tool_calls=[FakeToolCall('search_knewledge')]),
+    ])
+    executor = FakeExecutor()
+    memory_store = MemoryStore()
+    agent = BeautyAgent(
+        tools=[tool_schema('search_knowledge')],
+        llm=llm,
+        executor=executor,
+        memory_store=memory_store,
+    )
+
+    with pytest.raises(ToolNotFoundError):
+        agent.run('invalid-tool-failure', '查询护肤知识')
+
+    assert len(llm.messages_history) == 2
+    assert executor.calls == []
+    stored_messages = memory_store.get_memory('invalid-tool-failure').get_messages()
+    assert [message['role'] for message in stored_messages] == ['system', 'user']
 
 
 class ContractEmbeddingService:

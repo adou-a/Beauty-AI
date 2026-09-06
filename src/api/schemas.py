@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 
 
@@ -30,17 +30,28 @@ class AgentRequest(BaseModel):
     session_id: str
     message: str
 
+    @field_validator("session_id", "message")
+    @classmethod
+    def validate_non_blank(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("Must not be blank")
+        return value
+
 
 class AgentResponse(BaseModel):
 
     answer: str
 
+    @field_validator("answer")
+    @classmethod
+    def validate_answer(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("Must not be blank")
+        return value
 
-class PlangateRequest(BaseModel):
-    session_id: str
+
+class ErrorResponse(BaseModel):
+    code: str
     message: str
-
-class PlangateResponse(BaseModel):
-
-    answer: str
-
