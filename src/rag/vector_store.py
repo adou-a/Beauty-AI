@@ -1,4 +1,5 @@
 import json
+from math import isfinite
 from pathlib import Path
 from src.rag.models import EmbeddedKnowledgeFact, KnowledgeFact, SearchResult, Source
 from src.rag.similarity import cosine_similarity
@@ -95,6 +96,24 @@ class VectorStore:
                 )
             )
         return self.items
+
+    def load_required(self) -> list[EmbeddedKnowledgeFact]:
+        if not self.storage_path.is_file():
+            raise RuntimeError(
+                f'Required vector store is not a regular file: {self.storage_path}'
+            )
+
+        try:
+            items = self.load()
+        except Exception as exc:
+            raise RuntimeError(
+                f'Required vector store could not be loaded: {self.storage_path}'
+            ) from exc
+
+        if not items:
+            raise RuntimeError('Required vector store index is empty')
+
+        return items
 
 
     def search(

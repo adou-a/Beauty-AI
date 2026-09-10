@@ -64,7 +64,7 @@ class FakePlanningGate:
 def client() -> Iterator[TestClient]:
     original_overrides = app.dependency_overrides.copy()
     try:
-        with TestClient(app) as test_client:
+        with TestClient(app, raise_server_exceptions=False) as test_client:
             yield test_client
     finally:
         app.dependency_overrides.clear()
@@ -130,6 +130,10 @@ def test_api_returns_500_when_planning_gate_raises(client: TestClient) -> None:
     )
 
     assert response.status_code == 500
+    assert response.json() == {
+        "code": "internal_error",
+        "message": "Internal server error",
+    }
     assert gate.calls == [("error-session", "触发异常")]
     assert agent.calls == []
     assert workflow_runner.calls == []

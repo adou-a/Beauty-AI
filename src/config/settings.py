@@ -13,8 +13,6 @@ APP_ENV = os.getenv('APP_ENV','development')
 
 
 
-def check_settings():
-
-
-    if not DEEPSEEK_API_KEY:
-        raise ValueError('DEEPSEEK_API_KEY is missing')
+def check_settings() -> None:
+    if not DEEPSEEK_API_KEY or not DEEPSEEK_API_KEY.strip():
+        raise ValueError('DEEPSEEK_API_KEY is missing or blank')
