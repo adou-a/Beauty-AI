@@ -1,6 +1,6 @@
-function MessageItem(){
+function MessageItem({role, content}){
     return(
-        <div>你好,我是Beauty-AI</div>
+        <div>{role === "user" ? "用户" : "Beauty-AI"}：{content}</div>
     )
 }
 

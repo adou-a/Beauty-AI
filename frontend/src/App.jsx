@@ -18,7 +18,7 @@ function App() {
   return (
     <div>
       <Header />
-      <MessageList />
+      <MessageList messages = {messages} />
       <ChatInput />
 
      
