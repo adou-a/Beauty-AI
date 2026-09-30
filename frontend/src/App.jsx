@@ -14,12 +14,33 @@ function App() {
   const [error, setError] = useState("")
   const [sessionId, setSessionId] = useState("")
 
+function handleInputChange(newValue) {
+    setInput(newValue)
+  }
+
+function handleSubmit(){
+  if (input.trim() === ""){
+    return
+  }
+ 
+  const newMessage = {
+  id: crypto.randomUUID(),
+  role: "user",
+  content: input.trim()
+  }
+  setMessages(prevMessages => [...prevMessages,newMessage])
+  setInput("")
+}
+
+
 
   return (
     <div>
       <Header />
       <MessageList messages = {messages} />
-      <ChatInput />
+      <ChatInput input = {input}
+      onInputChange = {handleInputChange} 
+      onSend = {handleSubmit}/>
 
      
     </div>

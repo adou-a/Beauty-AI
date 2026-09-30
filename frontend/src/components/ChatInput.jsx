@@ -1,8 +1,10 @@
-function ChatInput(){
+function ChatInput({input,onInputChange, onSend}){
     return(
         <div>
-            <input placeholder="请输入你的问题" />
-            <button>发送</button>
+            <input placeholder="请输入你的问题" 
+            value = {input} 
+            onChange={(event) => onInputChange(event.target.value)}/>
+            <button onClick = {onSend}>发送</button>
         </div>
     )
 }
