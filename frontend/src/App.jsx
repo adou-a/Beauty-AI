@@ -4,7 +4,7 @@ import './App.css'
 import Header from './components/Header'
 import ChatInput from './components/ChatInput'
 import MessageList from './components/MessageList'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 
 function App() {
@@ -13,6 +13,27 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [sessionId, setSessionId] = useState("")
+
+
+useEffect(() => {
+  const storedSessionId = localStorage.getItem("beauty_ai_session_id")
+
+
+  if (
+    storedSessionId !== null &&
+    storedSessionId.trim() !== ""
+  ){
+    setSessionId(storedSessionId)
+  }else{
+    const newSessionId = crypto.randomUUID()
+
+    setSessionId(newSessionId)
+    localStorage.setItem("beauty_ai_session_id",newSessionId)
+  }
+},[])
+
+
+
 
 function handleInputChange(newValue) {
     setInput(newValue)
