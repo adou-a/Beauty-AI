@@ -1,10 +1,12 @@
-function ChatInput({input,onInputChange, onSend}){
+function ChatInput({input,onInputChange, onSend,loading}){
     return(
         <div>
             <input placeholder="请输入你的问题" 
             value = {input} 
             onChange={(event) => onInputChange(event.target.value)}/>
-            <button onClick = {onSend}>发送</button>
+            <button onClick = {onSend} disabled = {loading}>发送
+                
+            </button>
         </div>
     )
 }

@@ -73,7 +73,12 @@ try{
   }
   setMessages(prevMessages => [...prevMessages,assistantMessage])
 }catch(err){
-  setError(err.message)
+  if (err.code === "invalid_request") { setError("输入内容存在问题，请检查后重新提交。")}
+  else if (err.code === "service_unavailable") { setError("AI 服务暂时不可用，请稍后再试。")}
+  else if (err.code === "internal_error") { setError("系统处理时出现异常，请重新尝试。")}
+  else if (err.code === "network_error") { setError("网络连接失败，请检查网络或稍后重试。")}
+  else if (err.code === "invalid_response") { setError("服务返回异常，请稍后重试。")}
+  else { setError("请求失败，请稍后重试。")}
   setInput(prevInput => {if (prevInput === ""){
     return submittedMessage}else{ return prevInput}})
 }
@@ -89,9 +94,12 @@ requestRef.current = false
     <div>
       <Header />
       <MessageList messages = {messages} />
+      {loading && <p>正在回答…</p>}
+      {error && <p>{error}</p>}
       <ChatInput input = {input}
       onInputChange = {handleInputChange} 
-      onSend = {handleSubmit}/>
+      onSend = {handleSubmit}
+      loading= {loading} />
 
      
     </div>
