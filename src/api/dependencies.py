@@ -20,6 +20,8 @@ from src.agent.workflow.workflowrunner import WorkflowRunner
 from src.rag.embedding import EmbeddingService
 from src.rag.retriever import Retriever
 from src.rag.vector_store import VectorStore
+from  functools import lru_cache
+
 
 def get_ingredient_service():
     respository = IngredientRepository()
@@ -35,7 +37,7 @@ def get_ai_service():
     llm = LLMClient()
     return AIService(ingredient_service,llm)
 
-
+@lru_cache(maxsize = 1)
 def get_agent():
     embedding_service = EmbeddingService()
     vector_store = VectorStore()

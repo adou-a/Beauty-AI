@@ -17,7 +17,7 @@ export async function sendMessage(sessionId,message) {
 
 
 
-    } catch (error) {
+    } catch  {
         const networkError = new Error("Network request failed")
         networkError.status = null
         networkError.code = "network_error"
@@ -27,7 +27,7 @@ export async function sendMessage(sessionId,message) {
     let data
     try{
     data = await response.json()}
-    catch(error){
+    catch{
         const parseError = new Error("Invalid JSON response")
         parseError.status = response.status
         parseError.code = "invalid_response"

@@ -6,14 +6,14 @@ import ChatInput from './components/ChatInput'
 import MessageList from './components/MessageList'
 import { useState, useEffect ,useRef} from 'react'
 // Restore the real API after testing by changing this import to './api/chat'.
-import { sendMessage } from './api/chat.mock'
+import { sendMessage } from './api/chat'
 
 function App() {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
-  const [sessionId, setSessionId] = useState(()=>{
+  const [sessionId] = useState(()=>{
     const storedSessionId =localStorage.getItem("beauty_ai_session_id") 
     if (storedSessionId !== null && storedSessionId.trim() !== ""){
       return storedSessionId 

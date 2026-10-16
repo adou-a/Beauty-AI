@@ -10,7 +10,7 @@ from src.api.schemas import ErrorResponse
 from src.config import settings
 from src.rag.vector_store import VectorStore
 from src.utils.logger import get_logger
-
+from fastapi.middleware.cors import CORSMiddleware
 
 logger = get_logger(__name__)
 
@@ -41,6 +41,12 @@ async def lifespan(_app: FastAPI) -> AsyncGenerator[None]:
 
 
 app = FastAPI(lifespan = lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["POST"],
+    allow_headers=["Content-Type"],
+)
  
 
 @app.exception_handler(RequestValidationError)

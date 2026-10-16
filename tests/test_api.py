@@ -14,7 +14,7 @@ from src.exceptions.rag_exception import RetrieverError
 
 
 #创建一个测试客户端，导入具体文件的app
-client = TestClient(app)
+client = TestClient(app,raise_server_exceptions=False)
 
 #测试home功能正常
 def test_home():
@@ -99,60 +99,60 @@ def test_chat_invalid_request(chat_gate, field, value, path):
     assert chat_gate.calls == []
 
 
-# @pytest.mark.parametrize("field", ["session_id", "message"])
-# def test_chat_missing_field(chat_gate, field):
-#     payload = {"session_id": "test-session", "message": "question"}
-#     del payload[field]
-#     response = client.post("/agent/chat/", json=payload)
-#     assert response.status_code == 422
-#     assert response.json() == {"code": "invalid_request", "message": "Invalid request"}
-#     assert chat_gate.calls == []
+@pytest.mark.parametrize("field", ["session_id", "message"])
+def test_chat_missing_field(chat_gate, field):
+    payload = {"session_id": "test-session", "message": "question"}
+    del payload[field]
+    response = client.post("/agent/chat/", json=payload)
+    assert response.status_code == 422
+    assert response.json() == {"code": "invalid_request", "message": "Invalid request"}
+    assert chat_gate.calls == []
 
 
-# @pytest.mark.parametrize("error", [
-#     APIConnectionError(request=httpx.Request("POST", "https://example.invalid")),
-#     APITimeoutError(request=httpx.Request("POST", "https://example.invalid")),
-#     APIStatusError("private upstream error", response=httpx.Response(429, request=httpx.Request("POST", "https://example.invalid")), body=None),
-# ])
-# def test_chat_dependency_failure(chat_gate, error):
-#     chat_gate.error = error
-#     response = client.post("/agent/chat/", json={"session_id": "test-session", "message": "question"})
-#     assert response.status_code == 503
-#     assert response.json() == {"code": "service_unavailable", "message": "Service temporarily unavailable"}
+@pytest.mark.parametrize("error", [
+    APIConnectionError(request=httpx.Request("POST", "https://example.invalid")),
+    APITimeoutError(request=httpx.Request("POST", "https://example.invalid")),
+    APIStatusError("private upstream error", response=httpx.Response(429, request=httpx.Request("POST", "https://example.invalid")), body=None),
+])
+def test_chat_dependency_failure(chat_gate, error):
+    chat_gate.error = error
+    response = client.post("/agent/chat/", json={"session_id": "test-session", "message": "question"})
+    assert response.status_code == 503
+    assert response.json() == {"code": "service_unavailable", "message": "Service temporarily unavailable"}
 
 
-# @pytest.mark.parametrize("error", [RuntimeError, AttributeError, TypeError, KeyError, RetrieverError])
-# def test_chat_runtime_failure_is_private(chat_gate, error):
-#     chat_gate.error = error("PlanningGate traceback private details")
-#     response = client.post("/agent/chat/", json={"session_id": "test-session", "message": "question"})
-#     assert response.status_code == 500
-#     assert response.json() == {"code": "internal_error", "message": "Internal server error"}
+@pytest.mark.parametrize("error", [RuntimeError, AttributeError, TypeError, KeyError, RetrieverError])
+def test_chat_runtime_failure_is_private(chat_gate, error):
+    chat_gate.error = error("PlanningGate traceback private details")
+    response = client.post("/agent/chat/", json={"session_id": "test-session", "message": "question"})
+    assert response.status_code == 500
+    assert response.json() == {"code": "internal_error", "message": "Internal server error"}
 
 
-# @pytest.mark.parametrize("answer", ["", "   ", None, 123, {"final_answer": "internal"}])
-# def test_chat_invalid_answer_is_server_error(chat_gate, answer):
-#     chat_gate.result = answer
-#     response = client.post("/agent/chat/", json={"session_id": "test-session", "message": "question"})
-#     assert response.status_code == 500
-#     assert response.json() == {"code": "internal_error", "message": "Internal server error"}
+@pytest.mark.parametrize("answer", ["", "   ", None, 123, {"final_answer": "internal"}])
+def test_chat_invalid_answer_is_server_error(chat_gate, answer):
+    chat_gate.result = answer
+    response = client.post("/agent/chat/", json={"session_id": "test-session", "message": "question"})
+    assert response.status_code == 500
+    assert response.json() == {"code": "internal_error", "message": "Internal server error"}
 
 
-# def test_other_api_keeps_default_validation_contract():
-#     other_app = FastAPI()
-#     other_app.add_exception_handler(RequestValidationError, handle_request_validation)
+def test_other_api_keeps_default_validation_contract():
+    other_app = FastAPI()
+    other_app.add_exception_handler(RequestValidationError, handle_request_validation)
 
-#     @other_app.post("/other")
-#     def other(request: AgentRequest):
-#         return request
+    @other_app.post("/other")
+    def other(request: AgentRequest):
+        return request
 
-#     response = TestClient(other_app).post("/other", json={})
-#     assert response.status_code == 422
-#     assert list(response.json()) == ["detail"]
-#     assert {item["loc"][-1] for item in response.json()["detail"]} == {"session_id", "message"}
+    response = TestClient(other_app).post("/other", json={})
+    assert response.status_code == 422
+    assert list(response.json()) == ["detail"]
+    assert {item["loc"][-1] for item in response.json()["detail"]} == {"session_id", "message"}
 
 
-# def test_chat_openapi_contract():
-#     operation = app.openapi()["paths"]["/agent/chat/"]["post"]
-#     assert operation["requestBody"]["content"]["application/json"]["schema"]["$ref"] == "#/components/schemas/AgentRequest"
-#     for status, model in [("200", "AgentResponse"), ("422", "ErrorResponse"), ("503", "ErrorResponse"), ("500", "ErrorResponse")]:
-#         assert operation["responses"][status]["content"]["application/json"]["schema"]["$ref"] == f"#/components/schemas/{model}"
+def test_chat_openapi_contract():
+    operation = app.openapi()["paths"]["/agent/chat/"]["post"]
+    assert operation["requestBody"]["content"]["application/json"]["schema"]["$ref"] == "#/components/schemas/AgentRequest"
+    for status, model in [("200", "AgentResponse"), ("422", "ErrorResponse"), ("503", "ErrorResponse"), ("500", "ErrorResponse")]:
+        assert operation["responses"][status]["content"]["application/json"]["schema"]["$ref"] == f"#/components/schemas/{model}"
