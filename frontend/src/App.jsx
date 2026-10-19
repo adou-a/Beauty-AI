@@ -13,7 +13,7 @@ function App() {
   const [input, setInput] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
-  const [sessionId] = useState(()=>{
+  const [sessionId,setSessionId] = useState(()=>{
     const storedSessionId =localStorage.getItem("beauty_ai_session_id") 
     if (storedSessionId !== null && storedSessionId.trim() !== ""){
       return storedSessionId 
@@ -87,12 +87,22 @@ setLoading(false)
 requestRef.current = false
 }
  }
-
+function handleNewConversation(){
+  if (loading || requestRef.current) {
+    return
+  }
+  const newid = crypto.randomUUID()
+  setSessionId(newid)
+  setMessages([])
+  setInput("")
+  setError("")
+}
 
 
   return (
     <div>
-      <Header />
+      <Header onNewConversation = {handleNewConversation} 
+      loading = {loading} />
       <MessageList messages = {messages} />
       {loading && <p>正在回答…</p>}
       {error && <p>{error}</p>}
