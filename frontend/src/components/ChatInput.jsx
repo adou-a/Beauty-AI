@@ -1,6 +1,7 @@
 function ChatInput({input,onInputChange, onSend,loading}){
     return(
-        <div>
+        <div
+        className="chat-input">
             <input placeholder="请输入你的问题" 
             value = {input} 
             onChange={(event) => onInputChange(event.target.value)}/>

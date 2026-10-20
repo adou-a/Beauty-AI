@@ -1,0 +1,113 @@
+.app-shell {
+    height: 100dvh;
+    display: flex;
+
+    /* 让父容器使用 Flexbox */
+    flex-direction: column;
+    /* 让三个区域从上到下排列 */
+}
+
+.message-list {
+    /* 占据剩余空间 */
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    /* 内容超过高度时允许垂直滚动 */
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+
+.app-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+
+}
+
+.user-message,
+.assistant-message {
+width: fit-content;
+max-width: 85%;
+
+padding: 12px;
+border-radius: 12px;
+margin-bottom: 12px;
+white-space: pre-wrap;
+
+overflow-wrap: anywhere;
+}
+
+.user-message {
+    margin-left: auto;
+    background-color: #dbeafe;
+
+}
+
+.assistant-message{
+    margin-right: auto;
+    background-color: #f1f5f9;
+}
+
+
+.chat-input {
+    display: flex;
+    gap: 8px;
+
+    
+    width: 100%;
+
+
+    max-width: 900px;
+    margin: 0 auto;
+
+    padding: 16px;
+}
+
+.chat-input input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid grey;
+    border-radius: 8px;
+}
+
+
+.chat-input button {
+    flex-shrink: 0;
+    padding: 10px 16px;
+    background-color: #2563eb;
+    text-decoration-color: white;
+    border-radius: 8px;
+}
+
+.chat-input button:disabled{
+
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.loading-message,
+.error-message {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 8px 16px;
+}
+
+
+.loading-message {
+    color: #64748b;
+}
+
+.error-message {
+
+    color: #b91c1c;
+    background-color: #fef2f2;
+
+    
+}

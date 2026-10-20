@@ -1,6 +1,12 @@
 function MessageItem({role, content}){
     return(
-        <div>{role === "user" ? "用户" : "Beauty-AI"}：{content}</div>
+        <div className={role === "user" ? "user-message": "assistant-message"}
+        
+        
+        >{role === "user" ? "用户" : "Beauty-AI"}:{content}
+        
+        
+        </div>
     )
 }
 

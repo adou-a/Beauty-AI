@@ -3,8 +3,8 @@ import MessageItem from "./MessageItem";
 function MessageList({messages}){
 
     return(
-        <div>
-            {messages.length === 0 ? <div> 你好，我是Beauty-AI。 </div>:
+        <div className="message-list">
+            {messages.length === 0 ? <div> 你好,我是Beauty-AI。 </div>:
         messages.map((message) => {
             return(
                 <MessageItem

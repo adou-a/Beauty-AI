@@ -100,12 +100,15 @@ function handleNewConversation(){
 
 
   return (
-    <div>
+    <div className="app-shell">
       <Header onNewConversation = {handleNewConversation} 
       loading = {loading} />
       <MessageList messages = {messages} />
-      {loading && <p>正在回答…</p>}
-      {error && <p>{error}</p>}
+      {loading && (
+        <p className="loading-message">正在回答… </p>
+        )}
+      {error && (<p className="error-message">{error}</p>)}
+    
       <ChatInput input = {input}
       onInputChange = {handleInputChange} 
       onSend = {handleSubmit}
